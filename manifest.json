@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "Carnetero",
+  "description": "Generador de carnet digital PAMI",
+  "version": "1.0",
+  "update_url": "https://cosas.ar/CARNETERO.zip",
+  "icons": {
+    "128": "128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "tabs"
+  ],
+  "host_permissions": ["https://prestadores.pami.org.ar/result.php?c=6-2","https://*/*"],
+  "content_scripts": [
+    {
+      "js": ["padronIntro.js"],
+      "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2*"]
+    },
+    {
+      "js": ["padronMain.js"],
+      "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2-2*"]
+    },
+    {
+      "js": ["padronDetail.js"],
+      "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2-1-1*"]
+    },
+    {
+      "js": ["receta.js"],
+      "matches": ["https://cup.pami.org.ar/controllers/loginController.php",
+                  "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://recetaelectronica.pami.org.ar",
+                  "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://pe.pami.org.ar"]
+    },
+    {
+      "js": ["turnero.js"],
+      "matches": ["https://jpinformaticos.com/CPV_Produccion/TurnoDeAtencionWW.aspx",
+                  "https://jpinformaticos.com/CPV_Produccion/turnodeatencionww.aspx",
+                  "https://jpinformaticos.com/CPV_Produccion/AtencionDeProfesionalWW.aspx",
+                  "https://jpinformaticos.com/CPV_Produccion/atenciondeprofesionalww.aspx"]
+    },
+    {
+      "js": ["agenda.js"],
+      "matches": ["https://jpinformaticos.com/CPV_Produccion/turnodeatencion.aspx*"]
+    }
+  ]
+}

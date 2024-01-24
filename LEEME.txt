@@ -1,0 +1,23 @@
+PARA INSTALAR POR PRIMERA VEZ
+
+1- Descomprimir la carpeta CARNETERO en el escritorio o cualquier otro lugar
+2- En Chrome, entrar a "Administrar extensiones". Se puede escribir "chrome://extensions" en la barra de busqueda.
+3- En la esquina superior derecha, activar la opción "Modo de desarrollador"
+4- En la esquina superior izquierda, "Cargar extensión sin empaquetar"
+5- Entrar a la carpeta CARNETERO que descomprimimos y tocar "Seleccionar carpeta"
+
+PARA ACTUALIZAR
+
+1- Descomprimir la nueva carpeta en el mismo lugar, reemplazar los archivos
+2- En "Administrar extensiones", tocar "Actualizar"
+
+Actualizar la pagina el turnero cuando sea necesario que aparezcan los QR
+
+NOTAS:
+
+El programa usa el número de beneficio que esté en el turnero. Si está mal, va a dar error.
+ES NECESARIO QUE EL NÚMERO DE BENEFICIO INCLUYA EL CÓDIGO PARENTAL. DE LO CONTRARIO, VA A SUPONER QUE ES "00".
+
+Formatos aceptados
+99999999999900
+999999999999-00
