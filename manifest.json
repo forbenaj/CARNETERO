@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Carnetero",
-  "description": "Generador de carnet digital PAMI",
+  "description": "Herramientas PAMI",
   "version": "1.0.3",
   "update_url": "https://cosas.ar/CARNETERO/CARNETERO.zip",
   "icons": {
