@@ -46,6 +46,7 @@
     },
     {
       "js": ["agenda.js"],
+      "css": ["style.css"],
       "matches": ["https://jpinformaticos.com/CPV_Produccion/turnodeatencion.aspx*"]
     }
   ]
