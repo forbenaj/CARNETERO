@@ -1,19 +1,5 @@
-function copyText(element, secondaryElement){
+function highlightElement(element){
   element.style.transition = ""
-  const textArea = document.createElement("textarea");
-
-  if (typeof secondaryElement != 'undefined'){
-    secondaryElement.style.transition = ""
-    textArea.value = element.textContent.trim()+secondaryElement.textContent.trim();;
-    secondaryElement.style.backgroundColor = "yellow";
-  }
-  else{
-    textArea.value = element.textContent.trim();
-  }
-  document.body.appendChild(textArea);
-  textArea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textArea);
 
   element.style.backgroundColor = "yellow";
   
@@ -21,23 +7,20 @@ function copyText(element, secondaryElement){
   setTimeout(() => {
     element.style.transition = "background-color 2s"; // Adjust the duration as needed
     element.style.backgroundColor = "";
-    if (typeof secondaryElement != 'undefined'){
-      secondaryElement.style.transition = "background-color 2s"; // Adjust the duration as needed
-      secondaryElement.style.backgroundColor = "";
-    }
   }, 500); // Adjust the delay to match the transition duration
+
 }
 
 const table = document.querySelectorAll("table")[1];
 
 var nombreElement = table.rows[0].cells[1];
-var nombre = nombreElement.textContent;
+var nombre = nombreElement.textContent.trim();
 
 var beneficioElement = table.rows[2].cells[1];
-var beneficio = beneficioElement.textContent;
+var beneficio = beneficioElement.textContent.trim();
 
 var fechaElement = table.rows[3].cells[1];
-var fecha = fechaElement.textContent;
+var fecha = fechaElement.textContent.trim();
 //qrHeader.appendChild(qrText);
 //header.cells[4].insertAdjacentElement("afterend",qrHeader);
 
@@ -63,10 +46,12 @@ edadElement.insertAdjacentElement("afterend",edadCopyButton)
 
 
 nacCopyButton.addEventListener("click", function() {
-  copyText(fechaElement.firstChild)
+  navigator.clipboard.writeText(fechaElement.firstChild.textContent)
+  highlightElement(fechaElement.firstChild)
 });
 edadCopyButton.addEventListener("click", function() {
-  copyText(edadElement)
+  navigator.clipboard.writeText(edadElement.textContent)
+  highlightElement(edadElement)
 });
 
 console.log(edad);
@@ -109,7 +94,8 @@ let dniCopyButton = document.createElement("button");
 dniCopyButton.textContent = "📋";
 
 dniCopyButton.addEventListener("click", function() {
-  copyText(dniText);
+  highlightElement(dniText)
+  navigator.clipboard.writeText(dniText.textContent);
 });
 
 let dniContainer = document.createElement("div");
@@ -121,12 +107,65 @@ const toptable = document.querySelectorAll("table")[0];
 toptable.rows[1].insertAdjacentElement("afterend",dniContainer);
 
 
-let copyAll = document.createElement("button")
-copyAll.textContent = "Copiar paciente"
-let allElement = document.createElement("p")
-allElement.innerText = nombre+"\t\t"+"DNI\t"+dniNumber+"\t"+"PAMI"+"\t"+beneficio+"\t"+codNumber
-copyAll.addEventListener("click", function() {
-  copyText(allElement);
-});
 
-toptable.rows[1].insertAdjacentElement("afterend",copyAll);
+
+
+let mainContainer = document.getElementById("container")
+
+let tableContainer = document.createElement("div")
+tableContainer.id = "tableContainer"
+
+mainContainer.insertBefore(tableContainer,mainContainer.firstChild)
+
+tableContainer.appendChild(toptable)
+
+let botonera = document.createElement("div")
+
+let botoneraFieldset = document.createElement("fieldset")
+botoneraFieldset.style.display = "flex"
+botoneraFieldset.style.width = "100%"
+botoneraFieldset.style.flexDirection = "column"
+
+let botoneraTitle = document.createElement("legend")
+botoneraTitle.innerText = "Copiar datos"
+
+botoneraFieldset.appendChild(botoneraTitle)
+
+let botonCopiarSimple = document.createElement("input")
+botonCopiarSimple.type = "button"
+botonCopiarSimple.value = "Simple"
+botonCopiarSimple.addEventListener("click", function() {
+  highlightElement(nombreElement)
+  highlightElement(dniText)
+  let textToCopy = nombre+", DNI: "+dniNumber+", PAMI"
+  navigator.clipboard.writeText(textToCopy)
+})
+
+let botonCopiarExcel = document.createElement("input")
+botonCopiarExcel.type = "button"
+botonCopiarExcel.value = "Excel"
+botonCopiarExcel.addEventListener("click", function() {
+  highlightElement(nombreElement)
+  highlightElement(dniText)
+  highlightElement(beneficioElement)
+  let textToCopy = nombre+"\t\t"+"DNI\t"+dniNumber+"\t"+"PAMI"+"\t"+beneficio+"\t"+codNumber
+  navigator.clipboard.writeText(textToCopy)
+})
+
+let botonCopiarCirugia = document.createElement("input")
+botonCopiarCirugia.type = "button"
+botonCopiarCirugia.value = "Cirugia"
+botonCopiarCirugia.addEventListener("click", function() {
+  highlightElement(nombreElement)
+  highlightElement(dniText)
+  highlightElement(edadElement)
+  let textToCopy = nombre+" DNI: "+dniNumber+" PAMI ("+edad+" años)"
+  navigator.clipboard.writeText(textToCopy)
+})
+
+botoneraFieldset.appendChild(botonCopiarSimple)
+botoneraFieldset.appendChild(botonCopiarExcel)
+botoneraFieldset.appendChild(botonCopiarCirugia)
+
+tableContainer.appendChild(botoneraFieldset)
+tableContainer.style.display = "flex"

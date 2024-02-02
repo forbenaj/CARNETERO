@@ -1,19 +1,5 @@
-function copyText(element, secondaryElement){
+function highlightElement(element){
   element.style.transition = ""
-  const textArea = document.createElement("textarea");
-
-  if (typeof secondaryElement != 'undefined'){
-    secondaryElement.style.transition = ""
-    textArea.value = element.textContent.trim()+secondaryElement.textContent.trim();;
-    secondaryElement.style.backgroundColor = "yellow";
-  }
-  else{
-    textArea.value = element.textContent.trim();
-  }
-  document.body.appendChild(textArea);
-  textArea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textArea);
 
   element.style.backgroundColor = "yellow";
   
@@ -21,11 +7,8 @@ function copyText(element, secondaryElement){
   setTimeout(() => {
     element.style.transition = "background-color 2s"; // Adjust the duration as needed
     element.style.backgroundColor = "";
-    if (typeof secondaryElement != 'undefined'){
-      secondaryElement.style.transition = "background-color 2s"; // Adjust the duration as needed
-      secondaryElement.style.backgroundColor = "";
-    }
   }, 500); // Adjust the delay to match the transition duration
+
 }
 
 const table = document.querySelector("table");
@@ -49,7 +32,8 @@ let dniCopyButton = document.createElement("button");
 dniCopyButton.textContent = "📋";
 
 dniCopyButton.addEventListener("click", function() {
-  copyText(dniText);
+  navigator.clipboard.writeText(dniText.textContent);
+  highlightElement(dniText)
 });
 
 // Append dniText and dniCopyButton to a container element, e.g., a div
@@ -144,10 +128,14 @@ for(i=4;currentRow != null; i++){
   
   
     nomCopyButton.addEventListener("click", function() {
-      copyText(nombreCell.firstChild)
+      navigator.clipboard.writeText(nombreCell.firstChild.textContent.trim())
+      highlightElement(nombreCell.firstChild)
     });
     benefCopyButton.addEventListener("click", function() {
-      copyText(benefCell.firstChild, codCell.firstChild)
+      let fullBenef = benefCell.firstChild.textContent.trim() + codCell.firstChild.textContent.trim()
+      navigator.clipboard.writeText(fullBenef)
+      highlightElement(benefCell.firstChild)
+      highlightElement(codCell.firstChild)
     });
   }
   else{
