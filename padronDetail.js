@@ -11,18 +11,64 @@ function highlightElement(element){
 
 }
 
-const table = document.querySelectorAll("table")[1];
+function addRow(table,position,title,value){
+  let row = document.createElement("tr")
+  let titleCell = document.createElement("td")
+  titleCell.className = "gris"
+  let titleElement = document.createElement("p")
+  titleElement.innerText = title
+  let valueCell = document.createElement("td")
+  valueCell.className = "crema"
 
-var nombreElement = table.rows[0].cells[1];
+  row.appendChild(titleCell)
+  row.appendChild(valueCell)
+  titleCell.appendChild(titleElement)
+  valueCell.appendChild(value)
+
+  table.rows[position].insertAdjacentElement("beforebegin",row)
+}
+
+function getAge(date){
+  let from = date.split("/");
+  let birthdateTimeStamp = new Date(from[2], from[1] - 1, from[0]);
+  let cur = new Date();
+  let diff = cur - birthdateTimeStamp;
+  let age = Math.floor(diff/31557600000);
+  return age
+}
+
+const mainTable = document.querySelectorAll("table")[1];
+const topTable = document.querySelectorAll("table")[0];
+
+var nombreElement = mainTable.rows[0].cells[1];
 var nombre = nombreElement.textContent.trim();
 
-var beneficioElement = table.rows[2].cells[1];
+var beneficioElement = mainTable.rows[2].cells[1];
 var beneficio = beneficioElement.textContent.trim();
 
-var fechaElement = table.rows[3].cells[1];
+var fechaElement = mainTable.rows[3].cells[1];
 var fecha = fechaElement.textContent.trim();
+
+var edadElement = document.createElement("p");
+var edad = getAge(fecha)
+edadElement.textContent = "("+edad+" años)";
+
+const queryString = window.location.search;
+
+// Parse the query string into URLSearchParams
+const params = new URLSearchParams(queryString);
+
+let dniNumber = params.get("dni")
+let codNumber = params.get("parent")
+
 //qrHeader.appendChild(qrText);
 //header.cells[4].insertAdjacentElement("afterend",qrHeader);
+
+
+var qrImg = document.createElement("img")
+qrImg.setAttribute("src","https://image-charts.com/chart?chs=100x100&cht=qr&chl="+beneficio+"-"+codNumber);
+
+addRow(mainTable,4,"QR",qrImg)
 
 var nacCopyButton = document.createElement("button");
 nacCopyButton.textContent = "📋"
@@ -30,15 +76,6 @@ nacCopyButton.textContent = "📋"
 var edadCopyButton = document.createElement("button");
 edadCopyButton.textContent = "📋"
 
-var from = fecha.split("/");
-var birthdateTimeStamp = new Date(from[2], from[1] - 1, from[0]);
-var cur = new Date();
-var diff = cur - birthdateTimeStamp;
-var edad = Math.floor(diff/31557600000);
-
-var edadElement = document.createElement("p");
-
-edadElement.textContent = "("+edad+" años)";
 
 fechaElement.querySelector("p").insertAdjacentElement("afterend",edadElement);
 fechaElement.querySelector("p").insertAdjacentElement("afterend",nacCopyButton);
@@ -79,13 +116,6 @@ for(i=4;currentRow != null; i++){
 let dniText = document.createElement("p");
 dniText.style.fontSize = "x-large";
 
-const queryString = window.location.search;
-
-// Parse the query string into URLSearchParams
-const params = new URLSearchParams(queryString);
-
-let dniNumber = params.get("dni")
-let codNumber = params.get("parent")
 
 // Get the value of yourParameterName
 dniText.textContent = dniNumber;
@@ -103,8 +133,7 @@ dniContainer.appendChild(dniText);
 dniContainer.appendChild(dniCopyButton);
 
 // Insert the container element after table.rows[2]
-const toptable = document.querySelectorAll("table")[0];
-toptable.rows[1].insertAdjacentElement("afterend",dniContainer);
+topTable.rows[1].insertAdjacentElement("afterend",dniContainer);
 
 
 
@@ -117,7 +146,7 @@ tableContainer.id = "tableContainer"
 
 mainContainer.insertBefore(tableContainer,mainContainer.firstChild)
 
-tableContainer.appendChild(toptable)
+tableContainer.appendChild(topTable)
 
 let botonera = document.createElement("div")
 
