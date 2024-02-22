@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Carnetero",
   "description": "Herramientas PAMI",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "update_url": "https://cosas.ar/CARNETERO/CARNETERO.zip",
   "icons": {
     "128": "128.png"
@@ -38,14 +38,14 @@
                   "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://pe.pami.org.ar"]
     },
     {
-      "js": ["turnero.js"],
+      "js": ["JHC-ListadoPacientes.js"],
       "matches": ["https://jpinformaticos.com/CPV_Produccion/TurnoDeAtencionWW.aspx",
                   "https://jpinformaticos.com/CPV_Produccion/turnodeatencionww.aspx",
                   "https://jpinformaticos.com/CPV_Produccion/AtencionDeProfesionalWW.aspx",
                   "https://jpinformaticos.com/CPV_Produccion/atenciondeprofesionalww.aspx"]
     },
     {
-      "js": ["agenda.js"],
+      "js": ["JHC-AgendarTurno.js"],
       "css": ["style.css"],
       "matches": ["https://jpinformaticos.com/CPV_Produccion/turnodeatencion.aspx*"]
     }

@@ -49,36 +49,40 @@ mainTable.appendChild(padronFrame)
 
 let mainTable = document.getElementById("TABLECONTENT_MPAGE")
 
-let botonera = document.createElement("div")
+let botoneraContainer = document.createElement("div")
+botoneraContainer.id = "botoneraContainer"
 
 let botoneraFieldset = document.createElement("fieldset")
 botoneraFieldset.className = "Group copiarDatos"
+botoneraFieldset.id = "copiarDatos"
 
 let botoneraTitle = document.createElement("legend")
 botoneraTitle.className = "GroupTitle"
 botoneraTitle.innerText = "Copiar datos"
 
+botoneraContainer.appendChild(botoneraFieldset)
 botoneraFieldset.appendChild(botoneraTitle)
 
 let botonCopiarMensaje = document.createElement("input")
 botonCopiarMensaje.type = "button"
 botonCopiarMensaje.value = "Mensaje"
-botonCopiarMensaje.onclick = ()=>copiarMensaje()
+botonCopiarMensaje.onclick = ()=>copiarTurno("Mensaje")
 
 let botonCopiarCirugia = document.createElement("input")
 botonCopiarCirugia.type = "button"
 botonCopiarCirugia.value = "Cirugia"
-botonCopiarCirugia.onclick = ()=>copiarCirugia()
+botonCopiarCirugia.onclick = ()=>copiarTurno("Cirugia")
 
 botoneraFieldset.appendChild(botonCopiarMensaje)
 botoneraFieldset.appendChild(botonCopiarCirugia)
 
-mainTable.appendChild(botoneraFieldset)
+mainTable.appendChild(botoneraContainer)
 
 let dia = document.getElementById("span_vFECHADIA")
 let fecha = document.getElementById("ATENCIONFECHA")
 let hora = document.getElementById("ATENCIONHORA")
-let dr = document.getElementById("span_PROFESIONALID")
+let drFromTurnoLibre = document.getElementById("span_PROFESIONALID")
+let drFromBotonAgendar = document.getElementById("PROFESIONALID")
 
 let dni = document.getElementById("vAPACIENTENRODOC")
 let apellido = document.getElementById("span_PACIENTEAPELLIDO")
@@ -89,18 +93,52 @@ let motivo = document.getElementById("ATENCIONMOTIVO")
 let usuario = document.getElementById("span_vCOFUSUARIOID_MPAGE")
 
 
-function copiarMensaje(){
-    let copiar = `Queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr.innerText}`
-    navigator.clipboard.writeText(copiar)
-}
-function copiarCirugia(){
-    let copiar = apellido.innerText + " " + nombre.innerText + " " + dni.value + " " + os.options[0].innerText.trim() + " " + motivo.value + ", " + getFirstWord(dr.innerText) + " " + fecha.value + " - " + usuario.innerText
-    navigator.clipboard.writeText(copiar)
+function copiarTurno(type){
+  let dr;
+  let copiar;
+
+  if(drFromTurnoLibre){
+    dr = drFromTurnoLibre.innerText
+  }
+  else if(drFromBotonAgendar){
+    dr = drFromBotonAgendar.options[drFromBotonAgendar.selectedIndex].textContent
+  }
+
+  if(type=="Mensaje"){
+    copiar = `Queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
+  }
+  if(type=="Cirugia"){
+    copiar = apellido.innerText + " " + nombre.innerText + " " + dni.value + " " + os.options[0].innerText.trim() + " " + motivo.value + ", " + getFirstWord(dr) + " " + fecha.value + " - " + usuario.innerText
+  }
+  navigator.clipboard.writeText(copiar)
+  showMessage(copiar)
+
 }
 
 function getFirstWord(str) {
-    str = str.trim();
-    var words = str.split(/\s+/);
-    return words[0];
+  str = str.trim();
+  var words = str.split(/\s+/);
+  return words[0];
 }
 
+function showMessage(str){
+  let opacity = 1;
+  let messageContainer = document.createElement("div")
+  messageContainer.id = "messageContainer"
+  let message = document.createElement("p")
+  message.id = "message"
+  message.innerText = str
+
+  messageContainer.appendChild(message)
+  document.body.appendChild(messageContainer)
+  
+  var interval = setInterval(function() {
+    if (opacity <= 0) {
+        clearInterval(interval);
+        messageContainer.remove()
+    }
+    messageContainer.style.opacity = opacity;
+    opacity -= 0.01;
+  }, 10);
+
+}

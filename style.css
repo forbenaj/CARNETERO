@@ -1,3 +1,26 @@
 #TABLECONTENT_MPAGE{
     display:flex;
 }
+
+#botoneraContainer{
+    display:flex;
+}
+
+#copiarDatos{
+    position: relative;
+    height:400px;
+    top:15%;
+}
+
+#messageContainer{
+    background-color: yellow;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+#message{
+    font-size:24px;
+}
