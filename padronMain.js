@@ -1,64 +1,63 @@
+/* Se ejecuta en la pantalla de resultados del padrón.
+  Toma desde la url el dni que se colocó en el buscador y lo muestra en la página.
+  Agrega QR.
+  Agrega botones de copiar.
+  Estiliza los pacientes dados de baja para visualización clara.
+*/
+
+// Función para resaltar elementos al copiarlos
 function highlightElement(element){
   element.style.transition = ""
 
   element.style.backgroundColor = "yellow";
   
-  // After a delay, remove the background color to initiate the fade effect.
   setTimeout(() => {
-    element.style.transition = "background-color 2s"; // Adjust the duration as needed
+    element.style.transition = "background-color 2s";
     element.style.backgroundColor = "";
-  }, 500); // Adjust the delay to match the transition duration
+  }, 500);
 
 }
 
 const table = document.querySelector("table");
 
-let dniText = document.createElement("p");
-dniText.style.fontSize = "x-large";
 
+// Toma el dni de la URL
 const queryString = window.location.search;
-
-// Parse the query string into URLSearchParams
 const params = new URLSearchParams(queryString);
 
-// Get the value of yourParameterName
-dniText.textContent = params.get("dni");
+let dni = params.get("dni")
 
-/*chrome.storage.local.get(['dni'], function(result) {
-  dniText.textContent = result.dni;
-});*/
+
+// Creando el elemento que muestra el dni del paciente
+let dniContainer = document.createElement("div");
+
+let dniElement = document.createElement("p");
+dniElement.style.fontSize = "x-large";
+dniElement.textContent = dni
 
 let dniCopyButton = document.createElement("button");
 dniCopyButton.textContent = "📋";
 
 dniCopyButton.addEventListener("click", function() {
-  navigator.clipboard.writeText(dniText.textContent);
-  highlightElement(dniText)
+  navigator.clipboard.writeText(dni);
+  highlightElement(dniElement)
 });
 
-// Append dniText and dniCopyButton to a container element, e.g., a div
-let dniContainer = document.createElement("div");
-dniContainer.appendChild(dniText);
+dniContainer.appendChild(dniElement);
 dniContainer.appendChild(dniCopyButton);
 
-// Insert the container element after table.rows[2]
 table.rows[1].insertAdjacentElement("afterend",dniContainer);
 
 
+
+
+// Reemplaza el botón de volver para un correcto funcionamiento
 var oldGoBackButton = document.querySelector('.boton');
 var newGoBackButton = document.createElement('button');
-    //newGoBackButton.setAttribute('href', 'https://prestadores.pami.org.ar/result.php?c=6-2');
-    newGoBackButton.textContent="Volver"
-    newGoBackButton.className = 'boton';
-    //newGoBackButton.setAttribute('target', '_blank');
+newGoBackButton.textContent="Volver"
+newGoBackButton.className = 'boton';
 
 if (oldGoBackButton) {
-  // Remove the "onclick" attribute
-  /*oldGoBackButton.removeAttribute('onclick');
-
-  oldGoBackButton.setAttribute('href', 'https://prestadores.pami.org.ar/result.php?c=6-2');
-  oldGoBackButton.setAttribute('target', '_blank');
-  oldGoBackButton.className = 'buttonClass';*/
   oldGoBackButton.insertAdjacentElement("afterend",newGoBackButton)
   oldGoBackButton.remove()
   newGoBackButton.addEventListener('click', function() {
@@ -68,76 +67,81 @@ if (oldGoBackButton) {
 }
 
 
-
+// Creando la columna de QR
 let header = table.rows[3]; // Los títulos están en la cuarta fila
-let currentRow = table.rows[4]; // El primer paciente está en la quinta fila
-
 
 let qrText = document.createElement("p");
-    qrText.textContent = "QR";
-    qrText.classList.add("blanco");
+qrText.textContent = "QR";
+qrText.classList.add("blanco");
 
 let qrHeader = document.createElement("td");
-    qrHeader.appendChild(qrText);
+qrHeader.appendChild(qrText);
 header.cells[4].insertAdjacentElement("afterend",qrHeader); // Añadir la columna de QR después de Fecha Baja
 
 
 
+
+// Recorre la lista de pacientes y añade el QR, los botones de copiar y el formato
+let currentRow = table.rows[4]; // El primer paciente está en la quinta fila
 let i;
 
 for(i=4;currentRow != null; i++){
 
+  // Si no hay más pacientes, sale del loop
   currentRow = table.rows[i];
   if(currentRow == null){
     break
   }
-  let qrCell;
   
-  vencCell = currentRow.cells[4].firstChild;
-
-  qrCell = document.createElement("td");
-  currentRow.cells[4].insertAdjacentElement("afterend",qrCell);
 
   let nombreCell = currentRow.cells[0];
   let benefCell = currentRow.cells[1];
   let codCell = currentRow.cells[2];
-  let detalleCell = currentRow.cells[6]
+  let vencCell = currentRow.cells[4];
+  let detalleCell = currentRow.cells[5]
 
+  // Crea y adjunta la celda de QR, por más que no se vaya a insertar la imágen
+  let qrCell = document.createElement("td");
+  currentRow.cells[4].insertAdjacentElement("afterend",qrCell);
+
+
+  // Crea el nuevo link de la pantalla de detalle, para enviar el dni en la URL
   let detalleLink = detalleCell.firstChild
-
   let detalleHref = detalleLink.getAttribute("href")
+  detalleLink.setAttribute("href",detalleHref+"&dni="+dniElement.textContent)
 
-  detalleLink.setAttribute("href",detalleHref+"&dni="+dniText.textContent)
-
-  if(vencCell.textContent == "  "){
-    
-    let nomCopyButton = document.createElement("button");
-        nomCopyButton.textContent = "📋"
-    
-    let benefCopyButton = document.createElement("button");
-        benefCopyButton.textContent = "📋"
-    
+  // Si el paciente está activo, agrega el QR y los botones de copiar
+  if(vencCell.firstChild.textContent == "  "){
     
     let qrsrc = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+benefCell.textContent.trim()+"-"+codCell.textContent.trim();
     const qr = document.createElement("img");
     qrCell.appendChild(qr);
     qr.setAttribute("src",qrsrc);
+
+
+    let nomCopyButton = document.createElement("button");
+    nomCopyButton.textContent = "📋"
     
-    nombreCell.firstChild.insertAdjacentElement("afterend",nomCopyButton)
-    benefCell.firstChild.insertAdjacentElement("afterend",benefCopyButton)
-  
-  
+    let benefCopyButton = document.createElement("button");
+    benefCopyButton.textContent = "📋"
+    
     nomCopyButton.addEventListener("click", function() {
       navigator.clipboard.writeText(nombreCell.firstChild.textContent.trim())
       highlightElement(nombreCell.firstChild)
     });
+
     benefCopyButton.addEventListener("click", function() {
       let fullBenef = benefCell.firstChild.textContent.trim() + codCell.firstChild.textContent.trim()
       navigator.clipboard.writeText(fullBenef)
       highlightElement(benefCell.firstChild)
       highlightElement(codCell.firstChild)
     });
+    
+    nombreCell.firstChild.insertAdjacentElement("afterend",nomCopyButton)
+    benefCell.firstChild.insertAdjacentElement("afterend",benefCopyButton)
+
   }
+  // Si el paciente no está activo, añade formato
   else{
     currentRow.style.backgroundColor="#bbbbbb"
     nombreCell.style.textDecoration="line-through"
@@ -146,31 +150,3 @@ for(i=4;currentRow != null; i++){
   }
 
 }
-
-
-
-
-/*
-
-// Function to modify the URL and redirect
-function addUrlParameterAndRedirect() {
-
-  const form = document.getElementById("form2")
-
-  form.setAttribute("action", "result.php?c=6-2-2&dni="+document.querySelector('[name="nroDocumento"]').value);
-
-  form.submit();  
-}
-
-
-
-// Get all elements with the class "botonConsultar"
-const buttons = document.querySelectorAll('.botonConsultar');
-
-
-
-// Check if there is a second element (index 1) in the NodeList
-if (buttons.length > 1) {
-  // Add a click event listener to the second button
-  buttons[1].addEventListener('click',addUrlParameterAndRedirect)
-}*/

@@ -1,16 +1,19 @@
-/* Se ejecuta en el turnero JHC.
-  Genera un código QR para cada paciente y lo muestra al pasar el mouse por el número de afiliado.
+/* Se ejecuta en el turnero JHC (pantallas "Asignación de Turnos" y "Atención Paciente").
+  Genera un código QR para cada paciente y lo muestra al pasar el mouse por el número de beneficio.
+  Agrega opción para copiar datos de cada paciente.
 */
 
+
+// Función principal que agrega los nuevos elementos a cada paciente
 function loadAgenda(){
 
   var index = 1;
   var indexString = index < 10 ? "0"+index : index;
-  var turnoElement = document.getElementById("GridContainerRow_00"+indexString);
-  var benefElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString)
-  var actionElement = document.getElementById("vACTION_00"+indexString)
+  var turnoElement = document.getElementById("GridContainerRow_00"+indexString); // Contenedor de paciente
+  var beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString) // Elemento de numero de beneficio
+  var actionElement = document.getElementById("vACTION_00"+indexString) // Elemento de acción (únicamente disponible en pantalla "Asignación de Turnos")
 
-  var benefInner;
+  var benefInner; // Variable que aloja el numero de beneficio tal como se muestra en el turnero
   var beneficio;
   var cod;
 
@@ -18,13 +21,13 @@ function loadAgenda(){
     while(turnoElement){
 
 
-      benefElement.addEventListener('mouseover', (event) => {
-        // Get the target element that was hovered
-        const target = event.target;
+      // Cuando se pase el mouse por arriba del numero de beneficio
+      beneficioElement.addEventListener('mouseover', (event) => {
 
+        const target = event.target;
         benefInner = target.textContent;
 
-
+        // Formatear correctamente el numero de beneficio
         if(benefInner.includes("-")){
           let benefSplit = benefInner.split("-");
           beneficio=benefSplit[0]
@@ -43,34 +46,37 @@ function loadAgenda(){
           cod=benefInner.substr(12,14);
         }
 
-        console.log(beneficio,cod);
-
-        // Create the floating image element
+        // Crear el QR flotante
         const img = document.createElement('img');
         img.setAttribute("id","qr");
         img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
         img.style.position = 'absolute';
         img.style.zIndex = '9999';
 
-        // Position the image near the hovered element
+        // Posicionar la imagen cerca del elemento
         const rect = target.getBoundingClientRect();
         img.style.top = `${rect.top + window.scrollY + 20}px`;
         img.style.left = `${rect.left + window.scrollX + 20}px`;
 
-        // Add the image to the page
+        // Adjuntar la imagen
         document.body.appendChild(img);
       });
 
-      // Listen for mouseout event on all elements
-      benefElement.addEventListener('mouseout', (event) => {
-        // Remove the floating image
+
+      // Cuando se saque el mouse de arriba del numero de beneficio
+      beneficioElement.addEventListener('mouseout', (event) => {
+
+        // Quitar la imagen
         const qr = document.getElementById('qr');
         if (qr) {
           qr.remove();
         }
+
       });
 
+      // Si el elemento de acción existe, es decir, si estamos en la pantalla "Asignación de Turnos"
       if(actionElement){
+        // Cuando se seleccione una opcion, se espera a que aparezca la ventana "Ficha de Datos del Paciente"
         actionElement.onchange = (e) => waitForElementToExist('#gxp0_b').then(element => {
           let selectedOption = e.target.options[e.target.selectedIndex]
           console.log('The element exists', selectedOption);
@@ -84,7 +90,7 @@ function loadAgenda(){
 
         let newOption = document.createElement("option")
         newOption.innerText = "Copiar datos"
-        newOption.value = "6"
+        newOption.value = "7"
         actionElement.appendChild(newOption)
       }
 
@@ -92,7 +98,7 @@ function loadAgenda(){
       indexString = index < 10 ? "0"+index : index;
       
       turnoElement = document.getElementById("GridContainerRow_00"+indexString);
-      benefElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString)
+      beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString)
       actionElement = document.getElementById("vACTION_00"+indexString)
   };
 }
