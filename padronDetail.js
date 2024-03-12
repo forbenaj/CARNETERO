@@ -74,7 +74,7 @@ let dniCopyButton = document.createElement("button");
 dniCopyButton.textContent = "📋";
 
 dniCopyButton.addEventListener("click", function() {
-  navigator.clipboard.writeText(DNI);
+  navigator.clipboard.writeText(dni);
   highlightElement(dniElement)
 });
 
