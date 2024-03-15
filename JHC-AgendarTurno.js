@@ -108,7 +108,7 @@ function copiarTurno(type){
     copiar = `Queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
   }
   if(type=="Cirugia"){
-    copiar = apellido.innerText + " " + nombre.innerText + " " + dni.value + " " + os.options[0].innerText.trim() + " " + motivo.value + ", " + getFirstWord(dr) + " " + fecha.value + " - " + usuario.innerText
+    copiar = apellido.innerText + " " + nombre.innerText + " " + dni.value + " " + os.options[0].innerText.trim() + " " + motivo.value + ", " + getFirstWord(dr) + " " + fecha.value + " " + hora.value + " - " + usuario.innerText
   }
   navigator.clipboard.writeText(copiar)
   showMessage(copiar)
