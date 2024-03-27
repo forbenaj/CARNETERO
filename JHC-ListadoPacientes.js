@@ -12,6 +12,7 @@ function loadAgenda(){
   var turnoElement = document.getElementById("GridContainerRow_00"+indexString); // Contenedor de paciente
   var beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString) // Elemento de numero de beneficio
   var actionElement = document.getElementById("vACTION_00"+indexString) // Elemento de acción (únicamente disponible en pantalla "Asignación de Turnos")
+  var celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString) // Elemento de celular
 
   var benefInner; // Variable que aloja el numero de beneficio tal como se muestra en el turnero
   var beneficio;
@@ -94,12 +95,24 @@ function loadAgenda(){
         actionElement.appendChild(newOption)
       }
 
+      var numCel = celElement.innerText
+      if(numCel.replace(/\s/g, '') > 0){
+        let celLink = document.createElement("a")
+        celLink.href = "https://web.whatsapp.com/send?phone="+numCel.replace(/\s/g, '')
+        celLink.target = "_blank"
+        celLink.style.fontWeight = "normal"
+        celLink.innerText = numCel
+        celElement.innerHTML = ""
+        celElement.appendChild(celLink)
+      }
+
       index++
       indexString = index < 10 ? "0"+index : index;
       
       turnoElement = document.getElementById("GridContainerRow_00"+indexString);
       beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString)
       actionElement = document.getElementById("vACTION_00"+indexString)
+      celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString)
   };
 }
 
