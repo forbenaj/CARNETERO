@@ -73,8 +73,22 @@ botonCopiarCirugia.type = "button"
 botonCopiarCirugia.value = "Cirugia"
 botonCopiarCirugia.onclick = ()=>copiarTurno("Cirugia")
 
+let botonEnviarTurno = document.createElement("input")
+botonEnviarTurno.type = "button"
+botonEnviarTurno.value = "Enviar turno"
+botonEnviarTurno.onclick = (e) => {
+  
+  let botonModificarPaciente = document.getElementById("BTNBTNMODIFICARPACIENTE");
+  botonModificarPaciente.click()
+  waitForElementToExist('#gxp0_b').then(element => {enviarTurnoWhatsapp()})
+}
+botonEnviarTurno.style.backgroundColor="green"
+botonEnviarTurno.style.color="white"
+botonEnviarTurno.style.fontWeight="bold"
+
 botoneraFieldset.appendChild(botonCopiarMensaje)
 botoneraFieldset.appendChild(botonCopiarCirugia)
+botoneraFieldset.appendChild(botonEnviarTurno)
 
 mainTable.appendChild(botoneraContainer)
 
@@ -113,6 +127,59 @@ function copiarTurno(type){
   navigator.clipboard.writeText(copiar)
   showMessage(copiar)
 
+}
+
+function enviarTurnoWhatsapp() {
+  document.getElementById("gxp0_ifrm").onload = function(){
+    let dr;
+    let copiar;
+  
+    if(drFromTurnoLibre){
+      dr = drFromTurnoLibre.innerText
+    }
+    else if(drFromBotonAgendar){
+      dr = drFromBotonAgendar.options[drFromBotonAgendar.selectedIndex].textContent
+    }
+
+  
+    let closeButton = document.getElementById("gxp0_cls")
+
+    let iframe = document.getElementById("gxp0_ifrm")
+
+    
+    let telCod = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONOCODAREA")
+    let telNum = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONONRO")
+
+    let mensaje = `Su turno queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
+
+    let whatsappLink = "https://web.whatsapp.com/send?phone="+telCod.value+telNum.value+"&text="+mensaje
+    console.log(whatsappLink)
+
+    window.open(whatsappLink)
+
+    setTimeout(() => {closeButton.click()}, 10); 
+  }
+}
+
+
+function waitForElementToExist(selector) {
+  return new Promise(resolve => {
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector));
+    }
+
+    const observer = new MutationObserver(() => {
+      if (document.querySelector(selector)) {
+        resolve(document.querySelector(selector));
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+    });
+  });
 }
 
 function getFirstWord(str) {
