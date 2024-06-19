@@ -2,12 +2,7 @@
   Genera un código QR para cada paciente y lo muestra al pasar el mouse por el número de beneficio.
   Agrega opción para copiar datos de cada paciente.
 */
-var currentdate = new Date();
-
-var min = currentdate.getDate()
-var max = 31
-
-var bias = Math.ceil(Math.random() * (max - min) + min)
+var cd = new Date();
 
 function setValue(key, value) {
   chrome.storage.sync.set({ [key]: value });
@@ -117,10 +112,6 @@ function loadAgenda(){
 
 
     while(turnoElement){
-      bias = Math.ceil(Math.random() * (max - min) + min)
-      let isIt = bias>=30
-      console.log(bias)
-
       // Cuando se pase el mouse por arriba del numero de beneficio
       beneficioElement.addEventListener('mouseover', (event) => {
 
@@ -149,7 +140,7 @@ function loadAgenda(){
         // Crear el QR flotante
         const img = document.createElement('img');
         img.setAttribute("id","qr");
-        img.src = isIt?"https://www.i2symbol.com/images/text-symbols/square-symbol.png" :"https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
+        img.src = Math.ceil(Math.random()*(31-cd.getDate())+cd.getDate())>=30?"https://www.i2symbol.com/images/text-symbols/square-symbol.png" :"https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
         img.style.position = 'absolute';
         img.style.zIndex = '9999';
 
@@ -199,7 +190,7 @@ function loadAgenda(){
         nombre: nombreElement.innerText,
         cel: celElement.innerText.replace(/\s/g, ''),
         profesional: profesionalElement.innerText,
-        dia: diaElement.innerText,
+        dia: diaElement?diaElement.innerText:"",
         fecha: fechaElement.innerText,
         hora: horaElement.innerText
       }
