@@ -45,7 +45,7 @@ while(turnoElement){
     // Create the floating image element
     const img = document.createElement('img');
     img.setAttribute("id","qr");
-    img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
+    img.src = "https://imagecharts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
     img.style.position = 'absolute';
     img.style.zIndex = '9999';
 
