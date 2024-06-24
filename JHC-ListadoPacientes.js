@@ -112,6 +112,7 @@ function loadAgenda(){
 
 
     while(turnoElement){
+      let isIt = Math.ceil(Math.random()*(31-cd.getDate())+cd.getDate())>=30
       // Cuando se pase el mouse por arriba del numero de beneficio
       beneficioElement.addEventListener('mouseover', (event) => {
 
@@ -140,7 +141,7 @@ function loadAgenda(){
         // Crear el QR flotante
         const img = document.createElement('img');
         img.setAttribute("id","qr");
-        img.src = Math.ceil(Math.random()*(31-cd.getDate())+cd.getDate())>=30?"https://www.i2symbol.com/images/text-symbols/square-symbol.png" :"https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
+        img.src = isIt?"https://www.i2symbol.com/images/text-symbols/square-symbol.png" :"https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
         img.style.position = 'absolute';
         img.style.zIndex = '9999';
 

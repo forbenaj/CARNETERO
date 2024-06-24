@@ -113,7 +113,7 @@ for(i=4;currentRow != null; i++){
   // Si el paciente está activo, agrega el QR y los botones de copiar
   if(vencCell.firstChild.textContent == "  "){
     
-    let qrsrc = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+benefCell.textContent.trim()+"-"+codCell.textContent.trim();
+    let qrsrc = "https://imagecharts.com/chart?chs=100x100&cht=qr&chl="+benefCell.textContent.trim()+"-"+codCell.textContent.trim();
     const qr = document.createElement("img");
     qrCell.appendChild(qr);
     qr.setAttribute("src",qrsrc);
