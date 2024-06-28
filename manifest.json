@@ -1,53 +1,53 @@
 {
-  "manifest_version": 3,
-  "name": "Carnetero",
-  "description": "Herramientas PAMI",
-  "version": "1.1.6",
-  "update_url": "https://cosas.ar/CARNETERO/CARNETERO.zip",
-  "icons": {
-    "128": "128.png"
-  },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": [
-    "scripting",
-    "activeTab",
-    "storage",
-    "contextMenus",
-    "tabs"
-  ],
-  "host_permissions": ["https://prestadores.pami.org.ar/result.php?c=6-2","https://*/*"],
-  "content_scripts": [
-    {
-      "js": ["padronIntro.js"],
-      "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2*"]
+    "manifest_version": 3,
+    "name": "Carnetero",
+    "description": "Herramientas PAMI",
+    "version": "1.1.7",
+    "update_url": "https://cosas.ar/CARNETERO/CARNETERO.zip",
+    "icons": {
+        "128": "128.png"
     },
-    {
-      "js": ["padronMain.js"],
-      "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2-2*"]
+    "background": {
+        "service_worker": "background.js"
     },
-    {
-      "js": ["padronDetail.js"],
-      "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2-1-1*"]
-    },
-    {
-      "js": ["receta.js"],
-      "matches": ["https://cup.pami.org.ar/controllers/loginController.php",
-                  "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://recetaelectronica.pami.org.ar",
-                  "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://pe.pami.org.ar"]
-    },
-    {
-      "js": ["JHC-ListadoPacientes.js"],
-      "matches": ["https://jpinformaticos.com/CPV_Produccion/TurnoDeAtencionWW.aspx",
-                  "https://jpinformaticos.com/CPV_Produccion/turnodeatencionww.aspx",
-                  "https://jpinformaticos.com/CPV_Produccion/AtencionDeProfesionalWW.aspx",
-                  "https://jpinformaticos.com/CPV_Produccion/atenciondeprofesionalww.aspx"]
-    },
-    {
-      "js": ["JHC-AgendarTurno.js"],
-      "css": ["style.css"],
-      "matches": ["https://jpinformaticos.com/CPV_Produccion/turnodeatencion.aspx*"]
-    }
-  ]
+    "permissions": [
+        "scripting",
+        "activeTab",
+        "storage",
+        "contextMenus",
+        "tabs"
+    ],
+    "host_permissions": ["https://prestadores.pami.org.ar/result.php?c=6-2","https://*/*"],
+    "content_scripts": [
+        {
+            "js": ["padron/intro.js"],
+            "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2*"]
+        },
+        {
+            "js": ["utils.js","padron/results.js"],
+            "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2-2*"]
+        },
+        {
+            "js": ["utils.js","padron/detail.js"],
+            "matches": ["https://prestadores.pami.org.ar/result.php?c=6-2-1-1*"]
+        },
+        {
+            "js": ["receta/intro.js"],
+            "matches": ["https://cup.pami.org.ar/controllers/loginController.php",
+                        "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://recetaelectronica.pami.org.ar",
+                        "https://cup.pami.org.ar/controllers/loginController.php?redirect=https://pe.pami.org.ar"]
+        },
+        {
+            "js": ["utils.js","JHC/listadoPacientes.js"],
+            "matches": ["https://jpinformaticos.com/CPV_Produccion/TurnoDeAtencionWW.aspx",
+                        "https://jpinformaticos.com/CPV_Produccion/turnodeatencionww.aspx",
+                        "https://jpinformaticos.com/CPV_Produccion/AtencionDeProfesionalWW.aspx",
+                        "https://jpinformaticos.com/CPV_Produccion/atenciondeprofesionalww.aspx"]
+        },
+        {
+            "js": ["utils.js","JHC/agendarTurno.js"],
+            "css": ["style.css"],
+            "matches": ["https://jpinformaticos.com/CPV_Produccion/turnodeatencion.aspx*"]
+        }
+    ]
 }
