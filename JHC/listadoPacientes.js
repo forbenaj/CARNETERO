@@ -1,78 +1,85 @@
 /* Se ejecuta en el turnero JHC (pantallas "Asignación de Turnos" y "Atención Paciente").
   Genera un código QR para cada paciente y lo muestra al pasar el mouse por el número de beneficio.
   Agrega opción para copiar datos de cada paciente.
+  Agrega links de whatsapp a los celulares, y un cuadro de mensaje con variables dinámicas
 */
+
+var mainTable = document.getElementById('TABLEMAIN')
+
+class MessageBox{
+    constructor(main, defaultMessage){
+        this.main = main
+        this.defaultMessage = defaultMessage
+
+        this.displayButton = this.createButton("Mensaje", "", "green", "bold", "block")
+        this.displayButton.onclick = () => this.show()
+
+        this.container = document.createElement('div')
+        this.container.style.display = "none"
+        
+        this.inputField = document.createElement('textarea')
+        this.inputField.rows = "8"
+        this.inputField.cols = "60"
+
+        this.buttonsContainer = document.createElement('div')
+
+        this.resetButton = this.createButton("Reset", "red", "white", "bold")
+        this.resetButton.onclick = () => {
+            this.inputField.value = this.defaultMessage
+        }
+        
+        this.saveButton = this.createButton("Guardar", "green", "white", "bold")
+        this.saveButton.onclick = () => {
+            setValue("whatsappMessage",this.inputField.value);
+        }
+        
+        getValue("whatsappMessage", (value) => {
+            if (value === undefined) {
+                this.inputField.value = this.defaultMessage
+            }
+            else {this.inputField.value = value};
+        });
+        
+
+        this.buttonsContainer.appendChild(this.resetButton)
+        this.buttonsContainer.appendChild(this.saveButton)
+
+        this.container.appendChild(this.inputField)
+        this.container.appendChild(this.buttonsContainer)
+        
+        this.main.appendChild(this.displayButton)
+        this.main.appendChild(this.container)
+
+    }
+
+    createButton(value, backgroundColor, color, fontWeight, display){
+        let button = document.createElement('input')
+        button.type = "button"
+        button.value = value
+        button.style.backgroundColor = backgroundColor
+        button.style.color = color
+        button.style.fontWeight = fontWeight
+        button.style.display = display
+        return button
+    }
+
+    show(){
+        if (this.container.style.display == "none"){
+            this.container.style.display = "block"
+        }
+        else{
+            this.container.style.display = "none"
+        }
+    }
+}
+
 var defaultMessage = "Clínica Lazarte le recuerda su turno:\n#apellido #nombre\n#dia #fecha\n#hora\ncon el Profesional #profesional\n*POR FAVOR CONFIRME SU ASISTENCIA*"
 
 var exampleMessage = "Buen día, me comunico de la Clínica Lazarte para confirmar el turno de \
                       #apellido #nombre el día #dia #fecha a las #hora con el profesional #profesional. \
                       Va a poder asistir?"
 
-var tableMain = document.getElementById('TABLEMAIN')
-var showTextArea = document.createElement('input')
-showTextArea.type = "button"
-showTextArea.value = "Mensaje"
-showTextArea.style.display = "block"
-showTextArea.style.color="green"
-showTextArea.style.fontWeight="bold"
-
-var messageInputContainer = document.createElement('div')
-messageInputContainer.style.display = "none"
-
-var messageInputField = document.createElement('textarea')
-messageInputField.rows= "8"
-messageInputField.cols = "60"
-
-var buttonsContainer = document.createElement('div')
-
-var resetButton = document.createElement('input')
-resetButton.type = "button"
-resetButton.value = "Reset"
-resetButton.style.backgroundColor="red"
-resetButton.style.color="white"
-resetButton.style.fontWeight="bold"
-
-var saveButton = document.createElement('input')
-saveButton.type = "button"
-saveButton.value = "Guardar"
-saveButton.style.backgroundColor="green"
-saveButton.style.color="white"
-saveButton.style.fontWeight="bold"
-
-buttonsContainer.appendChild(resetButton)
-buttonsContainer.appendChild(saveButton)
-
-messageInputContainer.appendChild(messageInputField)
-messageInputContainer.appendChild(buttonsContainer)
-
-
-showTextArea.onclick = () => {
-    if (messageInputContainer.style.display == "none"){
-        messageInputContainer.style.display = "block"
-    }
-    else{
-        messageInputContainer.style.display = "none"
-    }
-}
-
-resetButton.onclick = () => {
-    messageInputField.value = defaultMessage
-
-}
-
-saveButton.onclick = () => {
-    setValue("whatsappMessage",messageInputField.value);
-}
-
-getValue("whatsappMessage", function(value) {
-  if (value === undefined) {
-      messageInputField.value = defaultMessage
-  }
-  else {messageInputField.value = value};
-});
-
-tableMain.appendChild(showTextArea)
-tableMain.appendChild(messageInputContainer)
+let messageBox = new MessageBox(mainTable, defaultMessage)
 
 // Función principal que agrega los nuevos elementos a cada paciente
 function loadAgenda(){
@@ -166,7 +173,7 @@ function loadAgenda(){
 
             let newOption = document.createElement("option")
             newOption.innerText = "Copiar datos"
-            newOption.value = "7"
+            newOption.value = "9"
             actionElement.appendChild(newOption)
         }
 
@@ -235,7 +242,6 @@ function copiarDatos() {
 
 function closeDialog(){
     console.log("Closed")
-    loadAgenda();
 }
 
 function openUrl(datosTurno){
@@ -251,3 +257,34 @@ function openUrl(datosTurno){
     var url = "https://web.whatsapp.com/send?phone="+datosTurno.cel+"&text="+encodeURIComponent(outputText)
     window.open(url, "_blank");
 }
+
+// Select the target node
+let turnosContainer = document.getElementById('GridContainerTbl');
+
+// Create a MutationObserver instance
+let observer = new MutationObserver((mutationsList) => {
+    for (let mutation of mutationsList) {
+        if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+            // Check if targetNode or its subtree has removed nodes
+            if (Array.from(mutation.removedNodes).includes(turnosContainer)) {
+                // Your function to execute when targetNode is removed
+                // Call your function here
+                console.log('Lista actualizada');
+                
+                    
+                setTimeout(() => {
+                    console.log('ready')
+                    turnosContainer = document.getElementById('GridContainerTbl');
+                    
+                    loadAgenda();
+                }, 500);
+            }
+        }
+    }
+});
+
+// Configuration of the observer:
+let config = { childList: true, subtree: true };
+
+// Start observing the target node for configured mutations
+observer.observe(document.body, config);

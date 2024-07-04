@@ -1,87 +1,102 @@
-var atencionMotivo = document.getElementById("ATENCIONMOTIVO")
+/* Se ejecuta en el turnero JHC (pantalla "Agregar turno").
+  Remueve restricción del campo OME para llenar otros campos
+  Agrega botones para copiar datos (para enviar como mensaje y para pacientes de cirugía)
+  Agrega botón para enviar turno por whatsapp
+*/
 
+var restrictedElements = ["ATENCIONMOTIVO","ATENCIONNOTA","ATENCIONCOMODIN"]
 
-// Create the textarea element
-var atencionMotivoNew = document.createElement('textarea');
-
-// Set attributes for the textarea
-atencionMotivoNew.placeholder = 'Ingrese Motivo de Atención';
-atencionMotivoNew.spellcheck = true;
-atencionMotivoNew.cols = 80;
-atencionMotivoNew.rows = 7;
-atencionMotivoNew.name = 'ATENCIONMOTIVO';
-atencionMotivoNew.id = 'ATENCIONMOTIVO';
-atencionMotivoNew.className = 'form-control Attribute';
-//atencionMotivoNew.setAttribute("onfocus","gx.evt.onfocus(this, 211,'',false,'',0)")
-atencionMotivoNew.setAttribute("onchange",";gx.evt.onchange(this, event)")
-atencionMotivoNew.setAttribute("onblur",";gx.evt.onblur(this,211);")
-atencionMotivoNew.setAttribute("onkeydown","return gx.evt.checkMaxLength(this,500,event);")
-atencionMotivoNew.setAttribute("onkeyup","return gx.evt.checkMaxLength(this,500,event);")
-atencionMotivoNew.setAttribute('data-gx-context', '["", false]');
-atencionMotivoNew.maxLength = 500;
-atencionMotivoNew.setAttribute('data-gx-tpl-applied-atts-vars', '');
-
-
-atencionMotivo.replaceWith(atencionMotivoNew)
-
-let mainTable = document.getElementById("TABLECONTENT_MPAGE")
-
-let botoneraContainer = document.createElement("div")
-botoneraContainer.id = "botoneraContainer"
-
-let botoneraFieldset = document.createElement("fieldset")
-botoneraFieldset.className = "Group copiarDatos"
-botoneraFieldset.id = "copiarDatos"
-
-let botoneraTitle = document.createElement("legend")
-botoneraTitle.className = "GroupTitle"
-botoneraTitle.innerText = "Copiar datos"
-
-botoneraContainer.appendChild(botoneraFieldset)
-botoneraFieldset.appendChild(botoneraTitle)
-
-let botonCopiarMensaje = document.createElement("input")
-botonCopiarMensaje.type = "button"
-botonCopiarMensaje.value = "Mensaje"
-botonCopiarMensaje.onclick = ()=>copiarTurno("Mensaje")
-
-let botonCopiarCirugia = document.createElement("input")
-botonCopiarCirugia.type = "button"
-botonCopiarCirugia.value = "Cirugia"
-botonCopiarCirugia.onclick = ()=>copiarTurno("Cirugia")
-
-let botonEnviarTurno = document.createElement("input")
-botonEnviarTurno.type = "button"
-botonEnviarTurno.value = "Enviar turno"
-botonEnviarTurno.onclick = (e) => {
-  
-  let botonModificarPaciente = document.getElementById("BTNBTNMODIFICARPACIENTE");
-  botonModificarPaciente.click()
-  waitForElementToExist('#gxp0_b').then(element => {enviarTurnoWhatsapp()})
+for(let id of restrictedElements){
+    element = document.getElementById(id)
+    removeListener(element,"onfocus")
 }
-botonEnviarTurno.style.backgroundColor="green"
-botonEnviarTurno.style.color="white"
-botonEnviarTurno.style.fontWeight="bold"
 
-botoneraFieldset.appendChild(botonCopiarMensaje)
-botoneraFieldset.appendChild(botonCopiarCirugia)
-botoneraFieldset.appendChild(botonEnviarTurno)
 
-mainTable.appendChild(botoneraContainer)
+var mainTable = document.getElementById("TABLECONTENT_MPAGE")
 
-let dia = document.getElementById("span_vFECHADIA")
-let fecha = document.getElementById("ATENCIONFECHA")
-let hora = document.getElementById("ATENCIONHORA")
-let drFromTurnoLibre = document.getElementById("span_PROFESIONALID")
-let drFromBotonAgendar = document.getElementById("PROFESIONALID")
+class Botonera{
+    constructor(main, buttons){
+        
+        this.main = main
+        
+        this.buttons = buttons
 
-let dni = document.getElementById("vAPACIENTENRODOC")
-let apellido = document.getElementById("span_PACIENTEAPELLIDO")
-let nombre = document.getElementById("span_PACIENTENOMBRE")
-let os = document.getElementById("ATENCIONOBRASOCIALID")
-let motivo = document.getElementById("ATENCIONMOTIVO")
+        this.container = document.createElement("div")
+        this.container.id = "botoneraContainer"
+        
+        this.fieldset = document.createElement("fieldset")
+        this.fieldset.className = "Group copiarDatos"
+        this.fieldset.id = "copiarDatos"
+        
+        this.title = document.createElement("legend")
+        this.title.className = "GroupTitle"
+        this.title.innerText = "Copiar datos"
+        
+        this.container.appendChild(this.fieldset)
+        this.fieldset.appendChild(this.title)
 
-let usuario = document.getElementById("span_vCOFUSUARIOID_MPAGE")
+        this.createButtons()
+
+        this.main.appendChild(this.container)
+    }
+    
+    createButtons(){
+        for (let button of this.buttons) {
+            let buttonElement = document.createElement("input")
+            buttonElement.type = "button"
+            buttonElement.value = button.value
+            buttonElement.onclick = ()=> button.action(button.value)
+            
+            buttonElement.style.backgroundColor=button.backgroundColor
+            buttonElement.style.color=button.color
+            buttonElement.style.fontWeight=button.fontWeight
+
+            this.fieldset.appendChild(buttonElement)
+            
+        }
+    }
+}
+
+let buttons = [
+    {
+        value: "Mensaje",
+        action: copiarTurno,
+        bacgkroundColor: "none",
+        color: "black",
+        fontWeight: "normal"
+    },
+    {
+        value: "Cirugia",
+        action: copiarTurno,
+        bacgkroundColor: "none",
+        color: "black",
+        fontWeight: "normal"
+    },
+    {
+        value: "Enviar turno",
+        action: enviarTurnoWhatsapp,
+        backgroundColor: "green",
+        color: "white",
+        fontWeight: "bold"
+    }
+]
+
+let botonera = new Botonera(mainTable,buttons)
+
+
+var dia = document.getElementById("span_vFECHADIA")
+var fecha = document.getElementById("ATENCIONFECHA")
+var hora = document.getElementById("ATENCIONHORA")
+var drFromTurnoLibre = document.getElementById("span_PROFESIONALID")
+var drFromBotonAgendar = document.getElementById("PROFESIONALID")
+
+var dni = document.getElementById("vAPACIENTENRODOC")
+var apellido = document.getElementById("span_PACIENTEAPELLIDO")
+var nombre = document.getElementById("span_PACIENTENOMBRE")
+var os = document.getElementById("ATENCIONOBRASOCIALID")
+var motivo = document.getElementById("ATENCIONMOTIVO")
+
+var usuario = document.getElementById("span_vCOFUSUARIOID_MPAGE")
 
 
 function copiarTurno(type){
@@ -106,36 +121,42 @@ function copiarTurno(type){
 
 }
 
-function enviarTurnoWhatsapp() {
-    document.getElementById("gxp0_ifrm").onload = function(){
-        let dr;
-        let copiar;
-      
-        if(drFromTurnoLibre){
-            dr = drFromTurnoLibre.innerText
+function enviarTurnoWhatsapp(e) {
+    
+    let botonModificarPaciente = document.getElementById("BTNBTNMODIFICARPACIENTE");
+    botonModificarPaciente.click()
+    waitForElementToExist('#gxp0_b').then(element => {
+        document.getElementById("gxp0_ifrm").onload = function(){
+            let dr;
+            let copiar;
+          
+            if(drFromTurnoLibre){
+                dr = drFromTurnoLibre.innerText
+            }
+            else if(drFromBotonAgendar){
+                dr = drFromBotonAgendar.options[drFromBotonAgendar.selectedIndex].textContent
+            }
+    
+          
+            let closeButton = document.getElementById("gxp0_cls")
+    
+            let iframe = document.getElementById("gxp0_ifrm")
+    
+            
+            let telCod = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONOCODAREA")
+            let telNum = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONONRO")
+    
+            let mensaje = `Su turno queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
+    
+            let whatsappLink = "https://web.whatsapp.com/send?phone="+telCod.value+telNum.value+"&text="+mensaje
+            console.log(whatsappLink)
+    
+            window.open(whatsappLink)
+    
+            setTimeout(() => {closeButton.click()}, 10); 
         }
-        else if(drFromBotonAgendar){
-            dr = drFromBotonAgendar.options[drFromBotonAgendar.selectedIndex].textContent
-        }
-
-      
-        let closeButton = document.getElementById("gxp0_cls")
-
-        let iframe = document.getElementById("gxp0_ifrm")
-
         
-        let telCod = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONOCODAREA")
-        let telNum = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONONRO")
-
-        let mensaje = `Su turno queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
-
-        let whatsappLink = "https://web.whatsapp.com/send?phone="+telCod.value+telNum.value+"&text="+mensaje
-        console.log(whatsappLink)
-
-        window.open(whatsappLink)
-
-        setTimeout(() => {closeButton.click()}, 10); 
-    }
+    })
 }
 
 
@@ -160,3 +181,10 @@ function showMessage(str){
     }, 10);
 
 }
+
+
+function removeListener(element,attribute){
+    element.removeAttribute(attribute)
+    element.replaceWith(element.cloneNode(true));
+}
+
