@@ -81,86 +81,137 @@ var exampleMessage = "Buen día, me comunico de la Clínica Lazarte para confirm
 
 let messageBox = new MessageBox(mainTable, defaultMessage)
 
-// Función principal que agrega los nuevos elementos a cada paciente
-function loadAgenda(){
+class Paciente{
+    constructor(apellido, nombre, dni, benefRaw, cel ){
+        this.apellido = apellido
+        this.nombre = nombre
+        this.dni = dni
+        this.beneficio, this.cod = this.normalizeBeneficio(benefRaw)
+        this.cel = cel
+    }
+    normalizeBeneficio(benefRaw){
+        let beneficio, cod
+        if(benefRaw.includes("-")){
+            let benefSplit = benefRaw.split("-");
+            beneficio=benefSplit[0]
+            cod=benefSplit[1]
+        }
+        else if(benefRaw.length==11 || benefRaw.length==12){
+            beneficio=benefRaw;
+            cod = "00";
+        }
+        else if(benefRaw.length==13){
+            beneficio=benefRaw.substr(0,11);
+            cod = benefRaw.substr(11,13)
+        }
+        else if(benefRaw.length==14){
+            beneficio=benefRaw.substr(0,12);
+            cod=benefRaw.substr(12,14);
+        }
+        return beneficio, cod
+    }
+}
 
-    var index = 1;
-    var indexString = index < 10 ? "0"+index : index;
-    var turnoElement = document.getElementById("GridContainerRow_00"+indexString); // Contenedor de paciente
-    var beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString) // Elemento de numero de beneficio
-    var actionElement = document.getElementById("vACTION_00"+indexString) // Elemento de acción (únicamente disponible en pantalla "Asignación de Turnos")
-    var celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString) // Elemento de celular
+class Turno{
+    constructor(elements, paciente){
+        this.elements = elements
+        this.paciente = paciente
 
-    var apellidoElement = document.getElementById("span_PACIENTEAPELLIDO_00"+indexString)
-    var nombreElement = document.getElementById("span_PACIENTENOMBRE_00"+indexString)
-    var profesionalElement = document.getElementById("span_PROFESIONALAPENOM_00"+indexString)
-    var diaElement = document.getElementById("span_vFECHADIA_00"+indexString)
-    var fechaElement = document.getElementById("span_ATENCIONFECHA_00"+indexString)
-    var horaElement = document.getElementById("span_ATENCIONHORA_00"+indexString)
+        this.dia = this.elements.dia.innerText
+        this.fecha = this.elements.fecha.innerText
+        this.hora = this.elements.hora.innerText
+        this.profesional = this.elements.profesional.innerText
 
-    var benefInner; // Variable que aloja el numero de beneficio tal como se muestra en el turnero
-    var beneficio;
-    var cod;
-
-
-    while(turnoElement){
-        // Cuando se pase el mouse por arriba del numero de beneficio
-        beneficioElement.addEventListener('mouseover', (event) => {
-
-            const target = event.target;
-            benefInner = target.textContent;
-
-            // Formatear correctamente el numero de beneficio
-            if(benefInner.includes("-")){
-                let benefSplit = benefInner.split("-");
-                beneficio=benefSplit[0]
-                cod=benefSplit[1]
-            }
-            else if(benefInner.length==11 || benefInner.length==12){
-                beneficio=benefInner;
-                cod = "00";
-            }
-            else if(benefInner.length==13){
-                beneficio=benefInner.substr(0,11);
-                cod = benefInner.substr(11,13)
-            }
-            else if(benefInner.length==14){
-                beneficio=benefInner.substr(0,12);
-                cod=benefInner.substr(12,14);
-            }
-
-            // Crear el QR flotante
-            const img = document.createElement('img');
-            img.setAttribute("id","qr");
-            img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ beneficio +"-"+cod;
-            img.style.position = 'absolute';
-            img.style.zIndex = '9999';
-
-            // Posicionar la imagen cerca del elemento
-            const rect = target.getBoundingClientRect();
-            img.style.top = `${rect.top + window.scrollY + 20}px`;
-            img.style.left = `${rect.left + window.scrollX + 20}px`;
-
-            // Adjuntar la imagen
-            document.body.appendChild(img);
+        this.elements.beneficio.addEventListener('mouseover', (event) => {
+            let target = event.target;
+            this.showQR(target)
+        })
+        this.elements.beneficio.addEventListener('mouseout', (event) => {
+            this.removeQR()
         });
 
+        this.elements.cel.onclick = ()=>sendWhatsapp({...this.paciente, ...this})
+        this.elements.cel.style.cursor = "pointer";
 
-        // Cuando se saque el mouse de arriba del numero de beneficio
-        beneficioElement.addEventListener('mouseout', (event) => {
+        this.addCopyDataButton()
+    }
+    static createFromIndex(index){
+        let indexString = index < 10 ? "0"+index : index
 
-            // Quitar la imagen
-            const qr = document.getElementById('qr');
-            if (qr) {
-                qr.remove();
-            }
+        let turnoElement = document.getElementById("GridContainerRow_00"+indexString)
 
-        });
+        if(!turnoElement){
+            return null
+        }
 
+        let diaElement = document.getElementById("span_vFECHADIA_00"+indexString)
+        let fechaElement = document.getElementById("span_ATENCIONFECHA_00"+indexString)
+        let horaElement = document.getElementById("span_ATENCIONHORA_00"+indexString)
+        let profesionalElement = document.getElementById("span_PROFESIONALAPENOM_00"+indexString)
+
+        
+        let apellidoElement = document.getElementById("span_PACIENTEAPELLIDO_00"+indexString)
+        let nombreElement = document.getElementById("span_PACIENTENOMBRE_00"+indexString)
+        let dniElement = document.getElementById("span_PACIENTENRODOC_00"+indexString)
+
+        let beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString) // Elemento de numero de beneficio
+        let celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString) // Elemento de celular
+        let actionElement = document.getElementById("vACTION_00"+indexString) // Elemento de acción (únicamente disponible en pantalla "Asignación de Turnos")
+
+
+        let elements = {
+            turno: turnoElement,
+            dia: diaElement,
+            fecha: fechaElement,
+            hora: horaElement,
+            profesional: profesionalElement,
+            apellido: apellidoElement,
+            nombre: nombreElement,
+            dni: dniElement,
+            beneficio: beneficioElement,
+            cel: celElement,
+            action: actionElement
+        }
+
+        let apellido = apellidoElement.innerText
+        let nombre = nombreElement.innerText
+        let dni = dniElement.innerText
+        let beneficio = beneficioElement.innerText
+        let cel = celElement.innerText
+
+        let paciente = new Paciente(apellido,nombre,dni,beneficio,cel)
+
+        return new Turno(elements, paciente)
+    }
+    showQR(target){
+        
+        // Crear el QR flotante
+        let img = document.createElement('img');
+        img.setAttribute("id","qr");
+        img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ this.paciente.beneficio +"-"+this.paciente.cod;
+        img.style.position = 'absolute';
+        img.style.zIndex = '9999';
+
+        // Posicionar la imagen cerca del elemento
+        const rect = target.getBoundingClientRect();
+        img.style.top = `${rect.top + window.scrollY + 20}px`;
+        img.style.left = `${rect.left + window.scrollX + 20}px`;
+
+        // Adjuntar la imagen
+        document.body.appendChild(img);
+    }
+    removeQR(){
+        let qr = document.getElementById('qr');
+        if (qr) {
+            qr.remove();
+        }
+    }
+    addCopyDataButton(){
+        // Reformular función, estaría bueno una función general para añadir acciones
         // Si el elemento de acción existe, es decir, si estamos en la pantalla "Asignación de Turnos"
-        if(actionElement){
+        if(this.elements.action){
             // Cuando se seleccione una opcion, se espera a que aparezca la ventana "Ficha de Datos del Paciente"
-            actionElement.onchange = (e) => waitForElementToExist('#gxp0_b').then(element => {
+            this.elements.action.onchange = (e) => waitForElementToExist('#gxp0_b').then(element => {
                 let selectedOption = e.target.options[e.target.selectedIndex]
                 console.log('The element exists', selectedOption);
                 let closeButton = document.getElementById("gxp0_cls")
@@ -174,39 +225,23 @@ function loadAgenda(){
             let newOption = document.createElement("option")
             newOption.innerText = "Copiar datos"
             newOption.value = "9"
-            actionElement.appendChild(newOption)
+            this.elements.action.appendChild(newOption)
         }
-
-        let datosTurno = {
-            apellido: apellidoElement.innerText,
-            nombre: nombreElement.innerText,
-            cel: celElement.innerText.replace(/\s/g, ''),
-            profesional: profesionalElement.innerText,
-            dia: diaElement?diaElement.innerText:"",
-            fecha: fechaElement.innerText,
-            hora: horaElement.innerText
-        }
-
-        celElement.onclick = ()=>openUrl(datosTurno)
-        celElement.style.cursor = "pointer";
-        //celElement.style.textDecoration = "underline";
-
-        index++
-        indexString = index < 10 ? "0"+index : index;
-        
-        turnoElement = document.getElementById("GridContainerRow_00"+indexString);
-        beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString)
-        actionElement = document.getElementById("vACTION_00"+indexString)
-        celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString)
-
-        apellidoElement = document.getElementById("span_PACIENTEAPELLIDO_00"+indexString)
-        nombreElement = document.getElementById("span_PACIENTENOMBRE_00"+indexString)
-        profesionalElement = document.getElementById("span_PROFESIONALAPENOM_00"+indexString)
-        diaElement = document.getElementById("span_vFECHADIA_00"+indexString)
-        fechaElement = document.getElementById("span_ATENCIONFECHA_00"+indexString)
-        horaElement = document.getElementById("span_ATENCIONHORA_00"+indexString)
-    };
+    }
 }
+
+function loadAgenda(){
+    let i = 1
+    let turno = Turno.createFromIndex(i)
+    
+    while(turno){
+        i++
+        turno = Turno.createFromIndex(i)
+    }
+
+}
+
+
 
 loadAgenda()
 
@@ -244,17 +279,18 @@ function closeDialog(){
     console.log("Closed")
 }
 
-function openUrl(datosTurno){
 
-    let inputText = messageInputField.value;
+function sendWhatsapp(datos){
+
+    let inputText = messageBox.inputField.value;
     let outputText = inputText.replace(/#(\w+)/g, (match, placeholder) =>{
-        if (datosTurno.hasOwnProperty(placeholder)) {
-            return datosTurno[placeholder];
+        if (datos.hasOwnProperty(placeholder)) {
+            return datos[placeholder];
         } else {
             return match; // If the placeholder is not found, leave it unchanged
         }
     });
-    var url = "https://web.whatsapp.com/send?phone="+datosTurno.cel+"&text="+encodeURIComponent(outputText)
+    var url = "https://web.whatsapp.com/send?phone="+datos.cel+"&text="+encodeURIComponent(outputText)
     window.open(url, "_blank");
 }
 
