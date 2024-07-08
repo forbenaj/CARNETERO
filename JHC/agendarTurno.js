@@ -83,6 +83,58 @@ let buttons = [
 
 let botonera = new Botonera(mainTable,buttons)
 
+class TurnoAgendar extends Turno{
+    constructor(elements, paciente){
+        let dia = elements.dia.innerText
+        let fecha = elements.fecha.innerText
+        let hora = elements.hora.innerText
+        let profesional = elements.profesional.innerText
+
+        super(paciente, dia, fecha, hora, profesional)
+
+    }
+    static create(){
+        let diaElement = document.getElementById("span_vFECHADIA")
+        let fechaElement = document.getElementById("ATENCIONFECHA")
+        let horaElement = document.getElementById("ATENCIONHORA")
+        let profesionalElement = document.getElementById("span_PROFESIONALID")
+        profesionalElement = profesionalElement !== null ? profesionalElement : document.getElementById("PROFESIONALID")
+        
+        let apellidoElement = document.getElementById("span_PACIENTEAPELLIDO")
+        let nombreElement = document.getElementById("span_PACIENTENOMBRE")
+        let dniElement = document.getElementById("vAPACIENTENRODOC")
+
+        let osElement = document.getElementById("ATENCIONOBRASOCIALID")
+        let beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString) // Elemento de numero de beneficio
+        let celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString) // Elemento de celular
+        let actionElement = document.getElementById("vACTION_00"+indexString) // Elemento de acción (únicamente disponible en pantalla "Asignación de Turnos")
+
+
+        let elements = {
+            turno: turnoElement,
+            dia: diaElement,
+            fecha: fechaElement,
+            hora: horaElement,
+            profesional: profesionalElement,
+            apellido: apellidoElement,
+            nombre: nombreElement,
+            dni: dniElement,
+            beneficio: beneficioElement,
+            cel: celElement,
+            action: actionElement
+        }
+
+        let apellido = apellidoElement.innerText
+        let nombre = nombreElement.innerText
+        let dni = dniElement.innerText
+        let beneficio = beneficioElement.innerText
+        let cel = celElement.innerText
+
+        let paciente = new Paciente(apellido,nombre,dni,beneficio,cel)
+
+        return new TurnoListado(elements, paciente)
+    }
+}
 
 var dia = document.getElementById("span_vFECHADIA")
 var fecha = document.getElementById("ATENCIONFECHA")

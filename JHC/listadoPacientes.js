@@ -81,46 +81,18 @@ var exampleMessage = "Buen día, me comunico de la Clínica Lazarte para confirm
 
 let messageBox = new MessageBox(mainTable, defaultMessage)
 
-class Paciente{
-    constructor(apellido, nombre, dni, benefRaw, cel ){
-        this.apellido = apellido
-        this.nombre = nombre
-        this.dni = dni
-        this.beneficio, this.cod = this.normalizeBeneficio(benefRaw)
-        this.cel = cel
-    }
-    normalizeBeneficio(benefRaw){
-        let beneficio, cod
-        if(benefRaw.includes("-")){
-            let benefSplit = benefRaw.split("-");
-            beneficio=benefSplit[0]
-            cod=benefSplit[1]
-        }
-        else if(benefRaw.length==11 || benefRaw.length==12){
-            beneficio=benefRaw;
-            cod = "00";
-        }
-        else if(benefRaw.length==13){
-            beneficio=benefRaw.substr(0,11);
-            cod = benefRaw.substr(11,13)
-        }
-        else if(benefRaw.length==14){
-            beneficio=benefRaw.substr(0,12);
-            cod=benefRaw.substr(12,14);
-        }
-        return beneficio, cod
-    }
-}
-
-class Turno{
+class TurnoListado extends Turno{
     constructor(elements, paciente){
-        this.elements = elements
-        this.paciente = paciente
 
-        this.dia = this.elements.dia.innerText
-        this.fecha = this.elements.fecha.innerText
-        this.hora = this.elements.hora.innerText
-        this.profesional = this.elements.profesional.innerText
+        let dia = elements.dia? elements.dia.innerText : null
+        let fecha = elements.fecha.innerText
+        let hora = elements.hora.innerText
+        let profesional = elements.profesional.innerText
+
+        super(paciente, dia, fecha, hora, profesional)
+
+        this.elements = elements
+
 
         this.elements.beneficio.addEventListener('mouseover', (event) => {
             let target = event.target;
@@ -154,6 +126,7 @@ class Turno{
         let nombreElement = document.getElementById("span_PACIENTENOMBRE_00"+indexString)
         let dniElement = document.getElementById("span_PACIENTENRODOC_00"+indexString)
 
+        let osElement = document.getElementById("span_ATENCIONOBRASOCIALRAZONSOCIAL_00"+indexString)
         let beneficioElement = document.getElementById("span_PACIENTENROAFILIADO_00"+indexString) // Elemento de numero de beneficio
         let celElement = document.getElementById("span_vPACIENTECELULAR_00"+indexString) // Elemento de celular
         let actionElement = document.getElementById("vACTION_00"+indexString) // Elemento de acción (únicamente disponible en pantalla "Asignación de Turnos")
@@ -168,6 +141,7 @@ class Turno{
             apellido: apellidoElement,
             nombre: nombreElement,
             dni: dniElement,
+            os: osElement,
             beneficio: beneficioElement,
             cel: celElement,
             action: actionElement
@@ -176,19 +150,20 @@ class Turno{
         let apellido = apellidoElement.innerText
         let nombre = nombreElement.innerText
         let dni = dniElement.innerText
+        let os = osElement.innerText
         let beneficio = beneficioElement.innerText
         let cel = celElement.innerText
 
-        let paciente = new Paciente(apellido,nombre,dni,beneficio,cel)
+        let paciente = new Paciente(apellido,nombre,dni,os,beneficio,cel)
 
-        return new Turno(elements, paciente)
+        return new TurnoListado(elements, paciente)
     }
     showQR(target){
         
         // Crear el QR flotante
         let img = document.createElement('img');
         img.setAttribute("id","qr");
-        img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ this.paciente.beneficio +"-"+this.paciente.cod;
+        img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ this.paciente.beneficio[0] +"-"+this.paciente.beneficio[1];
         img.style.position = 'absolute';
         img.style.zIndex = '9999';
 
@@ -232,11 +207,11 @@ class Turno{
 
 function loadAgenda(){
     let i = 1
-    let turno = Turno.createFromIndex(i)
+    let turno = TurnoListado.createFromIndex(i)
     
     while(turno){
         i++
-        turno = Turno.createFromIndex(i)
+        turno = TurnoListado.createFromIndex(i)
     }
 
 }
