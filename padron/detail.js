@@ -77,7 +77,7 @@ var edad = getAge(fecha)
 edadElement.textContent = edad+" años";
 
 var qrImg = document.createElement("img")
-qrImg.setAttribute("src","https://image-charts.com/chart?chs=100x100&cht=qr&chl="+beneficio+"-"+cod);
+qrImg.setAttribute("src","https://imagecharts.com/chart?chs=100x100&cht=qr&chl="+beneficio+"-"+cod);
 
 addRow(mainTable,4,"EDAD:",edadElement,"grisClaro")
 addRow(mainTable,5,"QR:",qrImg,"crema")
