@@ -82,7 +82,7 @@ var exampleMessage = "Buen día, me comunico de la Clínica Lazarte para confirm
 let messageBox = new MessageBox(mainTable, defaultMessage)
 
 class TurnoListado extends Turno{
-    constructor(elements, paciente,e){
+    constructor(elements, paciente){
 
         let dia = elements.dia? elements.dia.innerText : null
         let fecha = elements.fecha.innerText
@@ -96,7 +96,7 @@ class TurnoListado extends Turno{
 
         this.elements.beneficio.addEventListener('mouseover', (event) => {
             let target = event.target;
-            this.showQR(target,e)
+            this.showQR(target)
         })
         this.elements.beneficio.addEventListener('mouseout', (event) => {
             this.removeQR()
@@ -158,12 +158,12 @@ class TurnoListado extends Turno{
 
         return new TurnoListado(elements, paciente,e)
     }
-    showQR(target,e){
+    showQR(target){
         
         // Crear el QR flotante
         let img = document.createElement('img');
         img.setAttribute("id","qr");
-        img.src = e?"https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ this.paciente.beneficio[0] +"-"+this.paciente.beneficio[1]:"https://www.i2symbol.com/images/text-symbols/square-symbol.png";
+        img.src = "https://image-charts.com/chart?chs=100x100&cht=qr&chl="+ this.paciente.beneficio[0] +"-"+this.paciente.beneficio[1];
         img.style.position = 'absolute';
         img.style.zIndex = '9999';
 
@@ -211,8 +211,7 @@ function loadAgenda(){
     
     while(turno){
         i++
-        e = Math.random() > 0.3
-        turno = TurnoListado.createFromIndex(i,e)
+        turno = TurnoListado.createFromIndex(i)
     }
 
 }
