@@ -1,11 +1,11 @@
 function currentUser(e){
   var users = {
-    'SU23683188': 'Lazarte',
-    'UP20122486878': 'Lucchini',
-    'UP20178440366N3': 'Crespin',
-    'UP20289175416': 'Peralta',
-    'UP20370802255N1': 'Lascano',
-    'UP27347676336N1': 'Llupia',
+    '0000': '0000',
+    '0000': '0000',
+    '0000': '0000',
+    '0000': '0000',
+    '0000': '000000
+    '0001001': 'fixursec',
     'default': ' '
   };
   return users[e];

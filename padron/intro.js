@@ -1,10 +1,7 @@
-/* Se ejecuta en la pantalla inicial del padrón (el buscador).
-  Añade el argumento "dni" a la URL del formulario buscador, para poder mostrarlo después en la pantalla principal del buscador.
-  Por serendipia elimina el captcha.
-*/
+80 3E 54 9A 180 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
 
-// Función para añadir la nueva acción al formulario y ejecutarlo
-function addUrlParameterAndRedirect() {
+80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+ct() {
     const form = document.getElementById("form2")
     const dniInput = document.querySelector('[name="nroDocumento"]')
     
@@ -14,9 +11,6 @@ function addUrlParameterAndRedirect() {
 
 
 // Agarra el botón "buscar" del dni
-const buttons = document.querySelectorAll('.botonConsultar');
-
-if (buttons.length > 1) {
-    // Añade el nuevo event listener
-    buttons[1].addEventListener('click',addUrlParameterAndRedirect)
-}
+const buttons = document.qu80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+orAll('.botonConsultar');
+80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
