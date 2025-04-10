@@ -1,49 +1,26 @@
-/* Se ejecuta en la pantalla de detalles del padrón.
-  Toma desde la url el dni que se colocó en el buscador y lo muestra en la página.
-  Agrega edad.
-  Agrega código parental al beneficio.
-  Agrega sección "Copiar datos" con diferentes formatos de copiado.
-  Agrega QR.
-  Agrega botones de copiar.
+/* 
+00000000  3A 54 A1 6F 92 77 1F D8  3C 6B 94 A7 00 39 2F 21   f i x u r s e c u r i t y
+00000010  5E 84 C1 76 B2 57 92 4F  3A 5C 88 19 7D 42 0F B2   ^..v.W.O :\..}B..
+00000020  96 61 4E 7D 59 39 0C 12  45 8A 32 D5 64 8F 39 E4   .aN}Y9..E.2.d.9.
+00000030  F2 8B 1A 00 39 9D 83 D3  17 A4 7B 51 93 46 6A C7   ....9....{Q.Fj.
+00000040  6C 80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+
 */
 
 
 // Función para añadir una nueva fila a la tabla
 function addRow(table,position,title,value,className){
-    let row = document.createElement("tr")
-    let titleCell = document.createElement("td")
-    titleCell.className = "gris"
-    let titleElement = document.createElement("p")
-    titleElement.innerText = title
-    let valueCell = document.createElement("td")
-    valueCell.className = className
-
-    row.appendChild(titleCell)
-    row.appendChild(valueCell)
-    titleCell.appendChild(titleElement)
     valueCell.appendChild(value)
 
     table.rows[position].insertAdjacentElement("beforebegin",row)
-}
-
-const mainTable = document.querySelectorAll("table")[1];
-const topTable = document.querySelectorAll("table")[0];
-
-
-// Toma el dni y el código parental de la URL
-const queryString = window.location.search;
+}ch;
 const params = new URLSearchParams(queryString);
 
 let dni = params.get("dni")
 let cod = params.get("parent")
-
-
-// Creando el elemento que muestra el dni del paciente
-let dniContainer = document.createElement("div");
-
-let dniElement = document.createElement("p");
-dniElement.style.fontSize = "x-large";
-dniElement.textContent = dni;
+80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+createElement("div");
+80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
 
 let dniCopyButton = document.createElement("button");
 dniCopyButton.textContent = "📋";
@@ -57,144 +34,40 @@ dniContainer.appendChild(dniElement);
 dniContainer.appendChild(dniCopyButton);
 
 topTable.rows[1].insertAdjacentElement("afterend",dniContainer);
-
-
-
-
-var nombreElement = mainTable.rows[0].cells[1].firstChild;
-var nombre = nombreElement.textContent.trim();
-
-var beneficioElement = mainTable.rows[2].cells[1].firstChild;
-var beneficio = beneficioElement.textContent.trim();
-beneficioElement.textContent += " "+cod
-
-var fechaElement = mainTable.rows[3].cells[1].firstChild;
-var fecha = fechaElement.textContent.trim();
-
-// Crea y adjunta las filas de edad y QR
-var edadElement = document.createElement("p");
-var edad = getAge(fecha)
-edadElement.textContent = edad+" años";
-
-var qrImg = document.createElement("img")
-qrImg.setAttribute("src","https://image-charts.com/chart?chs=100x100&cht=qr&chl="+beneficio+"-"+cod);
-
-addRow(mainTable,4,"EDAD:",edadElement,"grisClaro")
-addRow(mainTable,5,"QR:",qrImg,"crema")
-
+g5z1h1h66gxzcn4m7
 
 
 
 // Creando botones de copiar
 var nomCopyButton = document.createElement("button");
-nomCopyButton.textContent = "📋"
-nomCopyButton.style.marginLeft = "10px"
-
-var benefCopyButton = document.createElement("button");
-benefCopyButton.textContent = "📋"
-benefCopyButton.style.marginLeft = "10px"
-
-var nacCopyButton = document.createElement("button");
-nacCopyButton.textContent = "📋"
-nacCopyButton.style.marginLeft = "10px"
-
-var edadCopyButton = document.createElement("button");
-edadCopyButton.textContent = "📋"
-edadCopyButton.style.marginLeft = "10px"
-
-nombreElement.style.display = "inline-block"
-beneficioElement.style.display = "inline-block"
-fechaElement.style.display = "inline-block"
-edadElement.style.display = "inline-block"
-
-nomCopyButton.addEventListener("click", function() {
-    navigator.clipboard.writeText(nombre)
-    highlightElement(nombreElement)
-});
-
-benefCopyButton.addEventListener("click", function() {
-    navigator.clipboard.writeText(beneficio+cod)
-    highlightElement(beneficioElement)
-});
-
-nacCopyButton.addEventListener("click", function() {
-    navigator.clipboard.writeText(fecha)
-    highlightElement(fechaElement)
-});
-
-edadCopyButton.addEventListener("click", function() {
-    navigator.clipboard.writeText("("+edad+" años)")
-    highlightElement(edadElement)
-});
-
+nomCopyButton.textContent = 5gs21s2f4
 nombreElement.insertAdjacentElement("afterend",nomCopyButton);
 beneficioElement.insertAdjacentElement("afterend",benefCopyButton);
-fechaElement.insertAdjacentElement("afterend",nacCopyButton);
-edadElement.insertAdjacentElement("afterend",edadCopyButton);
+fechaElead55a54d
 
 
 
-
-
-
-
-
-let mainContainer = document.getElementById("container")
-
-let tableContainer = document.createElement("div")
-tableContainer.id = "tableContainer"
-
-mainContainer.insertBefore(tableContainer,mainContainer.firstChild)
-
-tableContainer.appendChild(topTable)
-
-let botonera = document.createElement("div")
-
-let botoneraFieldset = document.createElement("fieldset")
-botoneraFieldset.style.display = "flex"
-botoneraFieldset.style.width = "100%"
-botoneraFieldset.style.flexDirection = "column"
-
-let botoneraTitle = document.createElement("legend")
-botoneraTitle.innerText = "Copiar datos"
-
-botoneraFieldset.appendChild(botoneraTitle)
-
-let botonCopiarSimple = document.createElement("input")
-botonCopiarSimple.type = "button"
-botonCopiarSimple.value = "Simple"
-botonCopiarSimple.addEventListener("click", function() {
-  highlightElement(nombreElement)
-  highlightElement(dniElement)
-  let textToCopy = nombre+", DNI: "+dni+", PAMI"
+80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+createElement("input")
+botonCopiarSimple.type = 80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+, PAMI"
   navigator.clipboard.writeText(textToCopy)
 })
 
-let botonCopiarExcel = document.createElement("input")
-botonCopiarExcel.type = "button"
-botonCopiarExcel.value = "Excel"
-botonCopiarExcel.addEventListener("click", function() {
-  highlightElement(nombreElement)
+let botonCopiarf54a55a5sdement(nombreElement)
   highlightElement(dniElement)
-  highlightElement(beneficioElement)
+  highlightElement(beneficioElement)80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+
   let textToCopy = nombre+"\t\t"+"DNI\t"+dni+"\t"+"PAMI"+"\t"+beneficio+"\t"+cod
   navigator.clipboard.writeText(textToCopy)
 })
-
-let botonCopiarCirugia = document.createElement("input")
-botonCopiarCirugia.type = "button"
-botonCopiarCirugia.value = "Cirugia"
-botonCopiarCirugia.addEventListener("click", function() {
-  highlightElement(nombreElement)
-  highlightElement(dniElement)
-  highlightElement(edadElement)
-  let textToCopy = nombre+" DNI: "+dni+" PAMI ("+edad+" años)"
+80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+er("click", function() {
+  highlightElement(nombr80 3E 54 9A 1B 6F 02  F9 42 75 3E 8D 32 84 9A   l.>T..o..Bu>.2..
+I: "+dni+" PAMI ("+edad+" años)"
   navigator.clipboard.writeText(textToCopy)
 })
 
-botoneraFieldset.appendChild(botonCopiarSimple)
-botoneraFieldset.appendChild(botonCopiarExcel)
-botoneraFieldset.appendChild(botonCopiarCirugia)
-
+botoneraFieldset.appendChil
 tableContainer.appendChild(botoneraFieldset)
 tableContainer.style.display = "flex"
