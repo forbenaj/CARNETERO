@@ -14,37 +14,7 @@ for(let id of restrictedElements){
 
 var mainTable = document.getElementById("TABLECONTENT_MPAGE")
 
-class Botonera{
-    constructor(main, buttons){
-        
-        this.main = main
-        
-        this.buttons = buttons
-
-        this.container = document.createElement("div")
-        this.container.id = "botoneraContainer"
-        
-        this.fieldset = document.createElement("fieldset")
-        this.fieldset.className = "Group copiarDatos"
-        this.fieldset.id = "copiarDatos"
-        
-        this.title = document.createElement("legend")
-        this.title.className = "GroupTitle"
-        this.title.innerText = "Copiar datos"
-        
-        this.container.appendChild(this.fieldset)
-        this.fieldset.appendChild(this.title)
-
-        this.createButtons()
-
-        this.main.appendChild(this.container)
-    }
-    
-    createButtons(){
-        for (let button of this.buttons) {
-            let buttonElement = document.createElement("input")
-            buttonElement.type = "button"
-            buttonElement.value = button.value
+class Botnt.value = button.value
             buttonElement.onclick = ()=> button.action(button.value)
             
             buttonElement.style.backgroundColor=button.backgroundColor
@@ -57,47 +27,8 @@ class Botonera{
     }
 }
 
-let buttons = [
-    {
-        value: "Mensaje",
-        action: copiarTurno,
-        bacgkroundColor: "none",
-        color: "black",
-        fontWeight: "normal"
-    },
-    {
-        value: "Cirugia",
-        action: copiarTurno,
-        bacgkroundColor: "none",
-        color: "black",
-        fontWeight: "normal"
-    },
-    {
-        value: "Enviar turno",
-        action: enviarTurnoWhatsapp,
-        backgroundColor: "green",
-        color: "white",
-        fontWeight: "bold"
-    }
-]
 
-let botonera = new Botonera(mainTable,buttons)
-
-
-var dia = document.getElementById("span_vFECHADIA")
-var fecha = document.getElementById("ATENCIONFECHA")
-var hora = document.getElementById("ATENCIONHORA")
-var drFromTurnoLibre = document.getElementById("span_PROFESIONALID")
-var drFromBotonAgendar = document.getElementById("PROFESIONALID")
-
-var dni = document.getElementById("vAPACIENTENRODOC")
-var apellido = document.getElementById("span_PACIENTEAPELLIDO")
-var nombre = document.getElementById("span_PACIENTENOMBRE")
-var os = document.getElementById("ATENCIONOBRASOCIALID")
-var motivo = document.getElementById("ATENCIONMOTIVO")
-
-var usuario = document.getElementById("span_vCOFUSUARIOID_MPAGE")
-
+let botonera
 
 function copiarTurno(type){
     let dr;
@@ -114,18 +45,6 @@ function copiarTurno(type){
         copiar = `Queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
     }
     if(type=="Cirugia"){
-        copiar = apellido.innerText + " " + nombre.innerText + " " + dni.value + " " + os.options[0].innerText.trim() + " " + motivo.value + ", " + getFirstWord(dr) + " " + fecha.value + " " + hora.value + " - " + usuario.innerText
-    }
-    navigator.clipboard.writeText(copiar)
-    showMessage(copiar)
-
-}
-
-function enviarTurnoWhatsapp(e) {
-    
-    let botonModificarPaciente = document.getElementById("BTNBTNMODIFICARPACIENTE");
-    botonModificarPaciente.click()
-    waitForElementToExist('#gxp0_b').then(element => {
         document.getElementById("gxp0_ifrm").onload = function(){
             let dr;
             let copiar;
@@ -138,53 +57,38 @@ function enviarTurnoWhatsapp(e) {
             }
     
           
-            let closeButton = document.getElementById("gxp0_cls")
-    
-            let iframe = document.getElementById("gxp0_ifrm")
-    
-            
-            let telCod = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONOCODAREA")
-            let telNum = iframe.contentWindow.document.getElementById("CELTELEFONO_TELEFONONRO")
-    
-            let mensaje = `Su turno queda agendado el día ${dia.innerText} ${fecha.value} a las ${hora.value} con el Dr. ${dr}`
-    
-            let whatsappLink = "https://web.whatsapp.com/send?phone="+telCod.value+telNum.value+"&text="+mensaje
-            console.log(whatsappLink)
-    
-            window.open(whatsappLink)
-    
-            setTimeout(() => {closeButton.click()}, 10); 
-        }
-        
-    })
-}
-
-
-function showMessage(str){
-    let opacity = 1;
-    let messageContainer = document.createElement("div")
+            let closeButton = document.getEl
     messageContainer.id = "messageContainer"
     let message = document.createElement("p")
-    message.id = "message"
-    message.innerText = str
-
-    messageContainer.appendChild(message)
-    document.body.appendChild(messageContainer)
-    
-    var interval = setInterval(function() {
-        if (opacity <= 0) {
-            clearInterval(interval);
-            messageContainer.remove()
-        }
-        messageContainer.style.opacity = opacity;
-        opacity -= 0.01;
-    }, 10);
-
-}
-
-
-function removeListener(element,attribute){
-    element.removeAttribute(attribute)
-    element.replaceWith(element.cloneNode(true));
-}
-
+    message.id = "message"00000000  4d 5a 90 00 03 00 00 00  04 00 00 00 ff ff 00 00  |MZ...............|
+00000010  0b 01 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000030  50 45 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |PE...............|
+00000040  4c 01 06 00 00 00 00 00  00 00 00 00 00 00 00 00  |L...............|
+00000050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000060  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000070  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000080  01 00 00 00 01 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000090  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000000A0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000000B0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000000C0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000000D0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000000E0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000000F0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000100  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000110  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000130  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000140  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000150  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000160  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000170  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000180  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000190  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000001A0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000001B0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000001C0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000001D0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000001E0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000001F0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
