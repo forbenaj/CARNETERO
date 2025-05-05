@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Carnetero",
     "description": "Herramientas PAMI",
-    "version": "2.0",
+    "version": "1.1.97",
     "update_url": "https://cosas.ar/CARNETERO/CARNETERO.zip",
     "icons": {
         "128": "128.png"
