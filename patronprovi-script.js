@@ -6,7 +6,7 @@
     const state = {
       query: "",
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
       filtered: [],
       activeIndex: null,
       pinnedIndex: null,
@@ -232,13 +232,13 @@
 
       return `
         <tr class="${isActive ? "is-active" : ""} ${isPinned ? "is-pinned" : ""}" data-index="${item.index}" tabindex="0">
-          <td class="name" data-label="Paciente">
+          <td class="name" data-label="Nombre">
             ${escapeHtml(patient.nombreCompleto)}
             ${warnings}
           </td>
           <td data-label="Telefono"><div class="chips">${compactList(patient.telefonos, 3)}</div></td>
           <td class="mono" data-label="Tipo DNI">${valueOrEmpty(patient.tipoDocumento)}</td>
-          <td class="mono" data-label="DNI">${escapeHtml(patient.dni)}</td>
+          <td class="mono dni-cell" data-label="Num DNI">${escapeHtml(patient.dni)}</td>
           <td data-label="Obra social">${valueOrEmpty(patient.obraSocial)}</td>
           <td class="mono" data-label="Beneficio">${valueOrEmpty(patient.beneficio)}</td>
           <td class="mono" data-label="Grado parental">${valueOrEmpty(patient.gradoParental)}</td>
@@ -305,29 +305,35 @@
             ${renderQrBox(qrBenefit || "")}
 
             <section class="detail-grid">
-              ${detailItem("Tipo DNI", patient.tipoDocumento, true)}
-              ${detailItem("DNI", patient.dni, true)}
-              ${detailItem("Obra social", patient.obraSocial)}
-              ${detailItem("Beneficio", patient.beneficio, true)}
-              ${detailItem("Grado parental", patient.gradoParental, true)}
-              ${detailItem("Registros", patient.recordsCount || 0, true)}
-              <div class="detail-wide">
+              ${detailItem("Obra social", patient.obraSocial, false, "mobile-detail")}
+              ${detailItem("Beneficio + Grad parental", [patient.beneficio, patient.gradoParental].filter(Boolean).join(" / "), true, "mobile-detail")}
+              <div class="detail-wide mobile-detail">
                 <p class="detail-label">Telefonos</p>
                 <div class="chips">${fullList(patient.telefonos)}</div>
               </div>
-              <div class="detail-wide">
+              ${detailItem("Tipo DNI", patient.tipoDocumento, true, "desktop-detail")}
+              ${detailItem("DNI", patient.dni, true, "desktop-detail")}
+              ${detailItem("Obra social", patient.obraSocial, false, "desktop-detail")}
+              ${detailItem("Beneficio", patient.beneficio, true, "desktop-detail")}
+              ${detailItem("Grado parental", patient.gradoParental, true, "desktop-detail")}
+              ${detailItem("Registros", patient.recordsCount || 0, true, "desktop-detail")}
+              <div class="detail-wide desktop-detail">
+                <p class="detail-label">Telefonos</p>
+                <div class="chips">${fullList(patient.telefonos)}</div>
+              </div>
+              <div class="detail-wide desktop-detail">
                 <p class="detail-label">Alias</p>
                 <div class="chips">${fullList(patient.aliases)}</div>
               </div>
-              <div class="detail-wide">
+              <div class="detail-wide desktop-detail">
                 <p class="detail-label">Tipos DNI originales</p>
                 <div class="chips">${fullList(patient.tipoDocumentoOriginales)}</div>
               </div>
-              <div class="detail-wide">
+              <div class="detail-wide desktop-detail">
                 <p class="detail-label">Avisos</p>
                 <div class="chips">${warnings}</div>
               </div>
-              <div class="detail-wide">
+              <div class="detail-wide desktop-detail">
                 <p class="detail-label">Fuentes</p>
                 <ul class="source-list">${sources}</ul>
               </div>
@@ -337,9 +343,9 @@
       `;
     }
 
-    function detailItem(label, value, mono = false) {
+    function detailItem(label, value, mono = false, className = "") {
       return `
-        <div class="detail-item">
+        <div class="detail-item ${escapeHtml(className)}">
           <p class="detail-label">${escapeHtml(label)}</p>
           <p class="detail-value ${mono ? "mono" : ""}">${valueOrEmpty(value, "Sin datos")}</p>
         </div>
@@ -424,7 +430,7 @@
     });
 
     els.pageSize.addEventListener("change", (event) => {
-      state.pageSize = Math.min(50, Math.max(10, Number(event.target.value) || 10));
+      state.pageSize = Math.min(50, Math.max(5, Number(event.target.value) || 5));
       state.page = 1;
       clearSelection();
       render();
