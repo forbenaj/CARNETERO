@@ -12,9 +12,15 @@
       <div>
         <h1>Padrón provisorio</h1>
       </div>
-      <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="Activar modo oscuro">
-        <span class="sr-only">Modo oscuro</span>
-      </button>
+      <div class="header-actions">
+        <button class="help-button" type="button" id="helpButton">Ayuda</button>
+        <div class="theme-control">
+          <span class="theme-toggle-label">Modo oscuro</span>
+          <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="Activar modo oscuro">
+            <span class="sr-only">Modo oscuro</span>
+          </button>
+        </div>
+      </div>
     </header>
 
     <section class="toolbar" aria-label="Filtros">
@@ -65,6 +71,36 @@
       <aside class="detail-panel" id="detailPanel" aria-live="polite"></aside>
     </div>
   </main>
+
+  <dialog class="help-dialog" id="helpDialog" aria-labelledby="helpTitle">
+    <div class="help-dialog__header">
+      <h2 id="helpTitle">Ayuda</h2>
+      <button class="help-dialog__close" type="button" id="helpClose" aria-label="Cerrar ayuda">×</button>
+    </div>
+
+    <div class="help-dialog__content">
+      <section>
+        <h3>Buscar pacientes</h3>
+        <p>Escribi uno o mas datos en el buscador: nombre, apellido, DNI, tipo de documento, telefono, obra social o beneficio. La busqueda ignora mayusculas y acentos.</p>
+      </section>
+
+      <section>
+        <h3>Ver detalles</h3>
+        <p>Pasá el mouse por encima de un paciente para visualizar el detalle. Hacé clic en una fila para fijar el panel lateral.</p>
+      </section>
+
+      <section>
+        <h3>Generar QR</h3>
+        <p>El panel genera un QR usando el beneficio del paciente. Tambien podes escribir o pegar un beneficio manualmente en el campo "QR de beneficio"</p>
+      </section>
+
+      <section>
+        <h3>Modo oscuro</h3>
+        <p>El interruptor del encabezado cambia entre modo claro y oscuro. La preferencia queda guardada en este navegador.</p>
+      </section>
+
+    </div>
+  </dialog>
 
   <script src="data/pacientes.js"></script>
   <script src="patronprovi-script.js"></script>

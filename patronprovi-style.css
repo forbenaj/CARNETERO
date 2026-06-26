@@ -99,11 +99,40 @@ h1 {
     letter-spacing: 0;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+
 .count {
     margin: 8px 0 0;
     color: var(--muted);
     font-size: 14px;
     font-weight: 700;
+}
+
+.help-button {
+    min-height: 32px;
+    padding: 6px 12px;
+    border-color: var(--line);
+    background: var(--panel);
+    box-shadow: var(--shadow-soft);
+}
+
+.theme-control {
+    display: grid;
+    justify-items: center;
+    gap: 5px;
+}
+
+.theme-toggle-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
 .theme-toggle {
@@ -418,6 +447,91 @@ button:active:not(:disabled) {
 button:disabled {
     cursor: not-allowed;
     opacity: 0.45;
+}
+
+.help-dialog {
+    width: min(92vw, 620px);
+    max-height: min(82vh, 720px);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--text);
+    padding: 0;
+    box-shadow: var(--shadow);
+}
+
+.help-dialog::backdrop {
+    background: rgba(15, 23, 42, 0.46);
+    backdrop-filter: blur(2px);
+}
+
+.help-dialog__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid var(--line-soft);
+    background:
+        linear-gradient(180deg, var(--head) 0%, var(--panel-3) 100%);
+    padding: 16px 18px;
+}
+
+.help-dialog__header h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 850;
+    line-height: 1.15;
+}
+
+.help-dialog__close {
+    display: inline-grid;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    place-items: center;
+    padding: 0;
+    color: var(--muted);
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.help-dialog__close:hover {
+    border-color: var(--accent-2);
+    color: var(--accent-2);
+}
+
+.help-dialog__content {
+    display: grid;
+    gap: 10px;
+    padding: 16px 18px 18px;
+}
+
+.help-dialog__content section {
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    background: var(--panel-2);
+    padding: 12px;
+}
+
+.help-dialog__content h3 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 850;
+    line-height: 1.25;
+}
+
+.help-dialog__content p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.5;
 }
 
 .page-label {
@@ -828,6 +942,17 @@ button:disabled {
 
     header {
         gap: 12px;
+    }
+
+    .header-actions {
+        align-items: flex-end;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .help-button {
+        min-height: 34px;
+        padding: 7px 11px;
     }
 
     .theme-toggle {

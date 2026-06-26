@@ -25,6 +25,9 @@
       pageLabel: document.getElementById("pageLabel"),
       prevPage: document.getElementById("prevPage"),
       nextPage: document.getElementById("nextPage"),
+      helpButton: document.getElementById("helpButton"),
+      helpDialog: document.getElementById("helpDialog"),
+      helpClose: document.getElementById("helpClose"),
       themeToggle: document.getElementById("themeToggle")
     };
 
@@ -407,6 +410,14 @@
       renderDetail();
     }
 
+    function closeHelpDialog() {
+      if (typeof els.helpDialog.close === "function") {
+        els.helpDialog.close();
+      } else {
+        els.helpDialog.removeAttribute("open");
+      }
+    }
+
     els.searchInput.addEventListener("input", (event) => {
       state.query = event.target.value;
       applySearch();
@@ -500,6 +511,24 @@
     els.themeToggle.addEventListener("click", () => {
       state.theme = state.theme === "dark" ? "light" : "dark";
       applyTheme();
+    });
+
+    els.helpButton.addEventListener("click", () => {
+      if (typeof els.helpDialog.showModal === "function") {
+        els.helpDialog.showModal();
+      } else {
+        els.helpDialog.setAttribute("open", "");
+      }
+    });
+
+    els.helpClose.addEventListener("click", () => {
+      closeHelpDialog();
+    });
+
+    els.helpDialog.addEventListener("click", (event) => {
+      if (event.target === els.helpDialog) {
+        closeHelpDialog();
+      }
     });
 
     applyTheme();
