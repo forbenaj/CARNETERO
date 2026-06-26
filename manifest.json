@@ -39,15 +39,15 @@
         },
         {
             "js": ["classes.js","utils.js","JHC/listadoPacientes.js"],
-            "matches": ["https://jpinformaticos.com/CPV_Produccion/TurnoDeAtencionWW.aspx",
-                        "https://jpinformaticos.com/CPV_Produccion/turnodeatencionww.aspx",
-                        "https://jpinformaticos.com/CPV_Produccion/AtencionDeProfesionalWW.aspx",
-                        "https://jpinformaticos.com/CPV_Produccion/atenciondeprofesionalww.aspx"]
+            "matches": ["https://jpinformaticos.ar/CPV_Produccion/TurnoDeAtencionWW.aspx",
+                        "https://jpinformaticos.ar/CPV_Produccion/turnodeatencionww.aspx",
+                        "https://jpinformaticos.ar/CPV_Produccion/AtencionDeProfesionalWW.aspx",
+                        "https://jpinformaticos.ar/CPV_Produccion/atenciondeprofesionalww.aspx"]
         },
         {
             "js": ["utils.js","JHC/agendarTurno.js"],
             "css": ["style.css"],
-            "matches": ["https://jpinformaticos.com/CPV_Produccion/turnodeatencion.aspx*"]
+            "matches": ["https://jpinformaticos.ar/CPV_Produccion/turnodeatencion.aspx*"]
         }
     ]
 }
