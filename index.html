@@ -1,42 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descargar Carnetero</title>
-    <!-- Bootstrap CSS CDN -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Custom styling */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f8ff; /* Light background color */
-        }
-        .btn-cute {
-            background-color: #ff69b4; /* Cute pink color */
-            color: white;
-            border-radius: 25px; /* Rounded corners */
-            padding: 15px 30px;
-            font-size: 16px;
-            border: none;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        .btn-cute:hover {
-            background-color: #ff1493; /* Darker pink on hover */
-            transform: scale(1.1); /* Slightly larger on hover */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Padrón provisorio</title>
+  <link rel="stylesheet" href="patronprovi-style.css">
 </head>
 <body>
-    <a download href="setup.exe"><button class="btn btn-cute">Descargar</button></a>
+  <main class="app">
+    <header>
+      <div>
+        <h1>Padrón provisorio</h1>
+      </div>
+      <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="Activar modo oscuro">
+        <span class="sr-only">Modo oscuro</span>
+      </button>
+    </header>
 
-    <!-- Bootstrap JS and dependencies (optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <section class="toolbar" aria-label="Filtros">
+      <div class="field">
+        <label for="searchInput">Buscar</label>
+        <input id="searchInput" type="search" autocomplete="off" placeholder="Nombre, DNI, tipo, telefono, obra social o beneficio">
+      </div>
+      <div class="page-size">
+        <label for="pageSize">Por pagina</label>
+        <select id="pageSize">
+          <option value="10" selected>10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <section>
+        <section class="table-wrap" id="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Telefono</th>
+                <th>Tipo DNI</th>
+                <th>DNI</th>
+                <th>Obra social</th>
+                <th>Beneficio</th>
+                <th>Grado parental</th>
+              </tr>
+            </thead>
+            <tbody id="patientsBody"></tbody>
+          </table>
+        </section>
+
+        <section class="empty" id="emptyState">No se encontraron pacientes.</section>
+
+        <nav class="pagination" aria-label="Paginacion">
+          <span class="page-label" id="pageLabel">Pagina 1 de 1</span>
+          <div class="page-actions">
+            <button type="button" id="prevPage">Anterior</button>
+            <button type="button" id="nextPage">Siguiente</button>
+          </div>
+        </nav>
+      </section>
+
+      <aside class="detail-panel" id="detailPanel" aria-live="polite"></aside>
+    </div>
+  </main>
+
+  <script src="data/pacientes.js"></script>
+  <script src="patronprovi-script.js"></script>
 </body>
 </html>

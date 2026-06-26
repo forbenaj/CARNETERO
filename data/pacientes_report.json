@@ -1,0 +1,117 @@
+{
+  "generatedFrom": "turnos",
+  "outputs": {
+    "patients": "data/pacientes.json",
+    "patientsByDni": "data/pacientes_por_dni.json",
+    "patientsJs": "data/pacientes.js",
+    "reviewCsv": "data/pacientes_revisar.csv",
+    "reviewJson": "data/pacientes_revisar.json"
+  },
+  "stats": {
+    "rows_read": 51026,
+    "rows_ignored_non_patient": 5007,
+    "rows_accepted": 45165,
+    "review_dni_vacio": 266,
+    "review_nombre_vacio": 265,
+    "review_dni_invalido": 38,
+    "unique_patients": 14851,
+    "patients_with_duplicates": 9281,
+    "patients_with_name_aliases": 789,
+    "review_rows": 569
+  },
+  "byFile": {
+    "DR A.LAZARTE.csv": {
+      "rows_read": 18699,
+      "rows_ignored_non_patient": 1022,
+      "rows_accepted": 17310,
+      "review_dni_vacio": 176,
+      "review_nombre_vacio": 15,
+      "review_dni_invalido": 9
+    },
+    "Dr. Columbus.csv": {
+      "rows_read": 356,
+      "rows_ignored_non_patient": 12,
+      "rows_accepted": 118,
+      "review_nombre_vacio": 216
+    },
+    "Dr. Gutierrez.csv": {
+      "rows_read": 768,
+      "rows_ignored_non_patient": 126,
+      "rows_accepted": 636,
+      "review_dni_vacio": 3,
+      "review_dni_invalido": 2
+    },
+    "Dr. Lucchini.csv": {
+      "rows_read": 1185,
+      "review_nombre_vacio": 2,
+      "rows_ignored_non_patient": 112,
+      "rows_accepted": 1065,
+      "review_dni_vacio": 4
+    },
+    "Dr. Peralta.csv": {
+      "rows_read": 19772,
+      "rows_ignored_non_patient": 2311,
+      "rows_accepted": 17300,
+      "review_nombre_vacio": 13,
+      "review_dni_invalido": 19,
+      "review_dni_vacio": 56
+    },
+    "Dr.Lascano Agusto.csv": {
+      "rows_read": 1084,
+      "rows_ignored_non_patient": 178,
+      "rows_accepted": 893,
+      "review_nombre_vacio": 6,
+      "review_dni_vacio": 5
+    },
+    "Dra Magdalena Llanos.csv": {
+      "rows_read": 898,
+      "rows_ignored_non_patient": 139,
+      "rows_accepted": 756,
+      "review_dni_invalido": 1,
+      "review_dni_vacio": 1
+    },
+    "Dra Silvana Rivero.csv": {
+      "rows_read": 333,
+      "rows_ignored_non_patient": 75,
+      "rows_accepted": 258
+    },
+    "Dra. Franchello.csv": {
+      "rows_read": 495,
+      "rows_ignored_non_patient": 69,
+      "rows_accepted": 416,
+      "review_nombre_vacio": 3,
+      "review_dni_vacio": 1,
+      "review_dni_invalido": 1
+    },
+    "Dra. Sandoval.csv": {
+      "rows_read": 809,
+      "review_nombre_vacio": 4,
+      "rows_ignored_non_patient": 90,
+      "rows_accepted": 710,
+      "review_dni_vacio": 3
+    },
+    "Dra. godoy.csv": {
+      "rows_read": 2873,
+      "rows_ignored_non_patient": 365,
+      "rows_accepted": 2492,
+      "review_dni_vacio": 6,
+      "review_dni_invalido": 3,
+      "review_nombre_vacio": 1
+    },
+    "Dra.Cuello.csv": {
+      "rows_read": 2983,
+      "rows_ignored_non_patient": 415,
+      "rows_accepted": 2541,
+      "review_dni_invalido": 3,
+      "review_nombre_vacio": 4,
+      "review_dni_vacio": 8
+    },
+    "Dra.LLupia.csv": {
+      "rows_read": 771,
+      "rows_ignored_non_patient": 93,
+      "rows_accepted": 670,
+      "review_nombre_vacio": 1,
+      "review_dni_vacio": 3
+    }
+  }
+}

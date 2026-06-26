@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Carnetero</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff; /* Light background color */
+        }
+        .btn-cute {
+            background-color: #ff69b4; /* Cute pink color */
+            color: white;
+            border-radius: 25px; /* Rounded corners */
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn-cute:hover {
+            background-color: #ff1493; /* Darker pink on hover */
+            transform: scale(1.1); /* Slightly larger on hover */
+        }
+    </style>
+</head>
+<body>
+    <a download href="setup.exe"><button class="btn btn-cute">Descargar</button></a>
+
+    <!-- Bootstrap JS and dependencies (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

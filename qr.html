@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR de beneficio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    main {
+      width: min(100%, 420px);
+      background: #ffffff;
+      border: 1px solid #d8dee8;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(31, 41, 55, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid #aeb8c7;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 18px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 6px;
+      background: #1463ff;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0f4fcc;
+    }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+      text-align: center;
+    }
+
+    .result.is-visible {
+      display: block;
+    }
+
+    .qr {
+      width: 220px;
+      height: 220px;
+      border: 1px solid #d8dee8;
+      border-radius: 6px;
+      padding: 10px;
+      background: #ffffff;
+    }
+
+    .normalized {
+      margin: 12px 0 0;
+      font-size: 20px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .error {
+      min-height: 20px;
+      margin: 10px 0 0;
+      color: #b42318;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>QR de beneficio</h1>
+
+    <form id="qrForm">
+      <label for="beneficio">Numero de beneficio completo</label>
+      <input
+        id="beneficio"
+        name="beneficio"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="99999999999900"
+        required
+      >
+      <button type="submit">Crear QR</button>
+      <p class="error" id="error" aria-live="polite"></p>
+    </form>
+
+    <section class="result" id="result" aria-live="polite">
+      <img class="qr" id="qr" alt="QR del beneficio">
+      <p class="normalized" id="normalized"></p>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("qrForm");
+    const input = document.getElementById("beneficio");
+    const error = document.getElementById("error");
+    const result = document.getElementById("result");
+    const qr = document.getElementById("qr");
+    const normalized = document.getElementById("normalized");
+
+    function normalizeBeneficio(value) {
+      const cleanValue = value.trim().replace(/[.\s]/g, "");
+
+      if (/^\d{11,12}-\d{2}$/.test(cleanValue)) {
+        return cleanValue;
+      }
+
+      if (/^\d{11,12}$/.test(cleanValue)) {
+        return cleanValue + "-00";
+      }
+
+      if (/^\d{13}$/.test(cleanValue)) {
+        return cleanValue.slice(0, 11) + "-" + cleanValue.slice(11);
+      }
+
+      if (/^\d{14}$/.test(cleanValue)) {
+        return cleanValue.slice(0, 12) + "-" + cleanValue.slice(12);
+      }
+
+      return null;
+    }
+
+    function showQr(beneficio) {
+      const qrText = encodeURIComponent(beneficio);
+      qr.src = "https://image-charts.com/chart?chs=220x220&cht=qr&chl=" + qrText;
+      normalized.textContent = beneficio;
+      result.classList.add("is-visible");
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const beneficio = normalizeBeneficio(input.value);
+
+      if (!beneficio) {
+        error.textContent = "Formato invalido. Use 99999999999900 o 999999999999-00.";
+        result.classList.remove("is-visible");
+        return;
+      }
+
+      error.textContent = "";
+      showQr(beneficio);
+    });
+  </script>
+</body>
+</html>
